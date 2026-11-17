@@ -1,0 +1,23 @@
+{
+  "name": "AGOGÉ – Spartánsky denník",
+  "short_name": "AGOGÉ",
+  "description": "Denný tréner psychickej odolnosti: jedna výzva na deň, stoická myšlienka, večerná reflexia a hodnosti.",
+  "lang": "sk",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0B0B0C",
+  "theme_color": "#0B0B0C",
+  "icons": [
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "./icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "Rozkaz dňa", "url": "./index.html#dnes" },
+    { "name": "Denník", "url": "./index.html#dennik" },
+    { "name": "Postup", "url": "./index.html#stat" }
+  ]
+}

@@ -1,0 +1,1317 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AGOGÉ – Spartánsky denník</title>
+<meta name="description" content="Denný tréner psychickej odolnosti: jedna výzva na deň, stoická myšlienka, večerná reflexia a hodnosti.">
+<meta name="theme-color" content="#0B0B0C">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AGOGÉ">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* základ, ktorý v artifacte dodával obal – tu si ho robíme sami */
+:root{
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:dark;
+}
+html,body{margin:0;background:#0B0B0C}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<style>
+/* Layout: jedna mobilná kolóna, fixná spodná navigácia, karty na čiernom poli */
+:root{
+  --coal:#0B0B0C;
+  --stone:#15161A;
+  --stone-2:#1D1F24;
+  --line:#2C2E35;
+  --bronze:#C08E45;
+  --bronze-dim:#8A6630;
+  --blood:#7E1C1C;
+  --blood-bright:#A82A2A;
+  --ash:#9A9892;
+  --bone:#EDE9E2;
+  --ok:#5F8F4E;
+  --font-d:"Oswald","Oswald Fallback",Impact,"Haettenschweiler","Arial Narrow",sans-serif;
+  --font-b:"Inter","Inter Fallback",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--coal);
+  color:var(--bone);
+  font-family:var(--font-b);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-text-size-adjust:100%;
+}
+#app{
+  max-width:560px;
+  margin:0 auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:0 calc(104px + env(safe-area-inset-bottom,0px));
+}
+h1,h2,h3,.disp{font-family:var(--font-d);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin:0;text-wrap:balance}
+p{margin:0}
+button{font-family:inherit;font-size:inherit;color:inherit;background:none;border:none;cursor:pointer}
+
+/* ---------- hlavička ---------- */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--coal)}
+.top{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
+  background:linear-gradient(180deg,var(--coal) 70%,rgba(11,11,12,0));
+  padding-block:14px 10px;
+  display:flex;align-items:center;gap:12px;
+}
+.crest{width:34px;height:40px;flex:0 0 auto}
+.brand{flex:1;min-width:0}
+.brand .nm{font-family:var(--font-d);font-size:22px;font-weight:700;letter-spacing:.12em;line-height:1;color:var(--bone)}
+.brand .sub{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--bronze-dim);margin-top:3px}
+.modebtn{
+  flex:0 0 auto;border:1px solid var(--line);border-radius:999px;
+  padding:8px 12px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  font-family:var(--font-d);color:var(--bronze);background:var(--stone);
+  min-height:40px;
+}
+
+/* ---------- pásik hodnosti ---------- */
+.rankbar{
+  display:flex;gap:8px;margin-bottom:14px;
+}
+.rankbar div{
+  flex:1;background:var(--stone);border:1px solid var(--line);border-radius:4px;
+  padding:9px 10px;min-width:0;
+}
+.rankbar .k{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash)}
+.rankbar .v{font-family:var(--font-d);font-size:17px;font-weight:600;color:var(--bone);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+
+/* ---------- karty ---------- */
+.card{background:var(--stone);border:1px solid var(--line);border-radius:6px;padding:16px;margin-bottom:14px}
+.card.order{border-color:var(--bronze-dim);border-top:3px solid var(--bronze)}
+.card.warn{border-color:var(--blood);background:#1A1113}
+.eyebrow{font-family:var(--font-d);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--bronze);margin-bottom:8px}
+.bark{font-family:var(--font-d);font-size:19px;line-height:1.25;font-weight:600;letter-spacing:.02em;color:var(--bone)}
+.ch-name{font-family:var(--font-d);font-size:26px;line-height:1.1;font-weight:700;color:var(--bone);margin:10px 0 8px}
+.ch-desc{color:var(--bone);margin-bottom:12px}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tag{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-family:var(--font-d);padding:5px 9px;border-radius:3px;background:var(--stone-2);border:1px solid var(--line);color:var(--ash)}
+.tag.b{color:var(--bronze);border-color:var(--bronze-dim)}
+.why{border-left:3px solid var(--bronze-dim);padding:2px 0 2px 12px;color:var(--ash);font-size:15px;font-style:italic}
+.safety{margin-top:12px;background:#17120F;border:1px solid var(--blood);border-radius:4px;padding:10px 12px;font-size:14px;color:#E8C9B6}
+.safety b{color:var(--blood-bright)}
+
+/* ---------- tlačidlá ---------- */
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+  min-height:60px;border-radius:5px;border:1px solid var(--line);
+  background:var(--stone-2);color:var(--bone);
+  font-family:var(--font-d);font-size:18px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  padding:12px;margin-top:10px;
+}
+.btn:active{transform:translateY(1px)}
+.btn.prim{background:var(--bronze);border-color:var(--bronze);color:#14100A}
+.btn.red{background:var(--blood);border-color:var(--blood);color:var(--bone)}
+.btn.ghost{background:transparent;color:var(--ash);min-height:52px;font-size:15px}
+.btn.sm{min-height:48px;font-size:14px}
+.btn:disabled{opacity:.4}
+.btn:focus-visible,.modebtn:focus-visible,.nav button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--bronze);outline-offset:2px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row2 .btn{margin-top:0}
+
+/* ---------- formuláre ---------- */
+label{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);margin:14px 0 6px;font-family:var(--font-d)}
+textarea,input[type=text],input[type=time],select{
+  width:100%;background:var(--coal);border:1px solid var(--line);border-radius:4px;
+  color:var(--bone);padding:12px;font-family:inherit;font-size:16px;min-height:52px;
+}
+textarea{min-height:84px;resize:vertical}
+
+/* ---------- navigácia ---------- */
+.nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:25;
+  background:#0E0F11;border-top:1px solid var(--line);
+  display:flex;
+  padding:0 max(8px,env(safe-area-inset-left,0px)) env(safe-area-inset-bottom,0px) max(8px,env(safe-area-inset-right,0px));
+}
+.nav button{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  min-height:68px;padding:8px 2px;color:var(--ash);
+  font-family:var(--font-d);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  border-top:3px solid transparent;
+}
+.nav button[aria-current=page]{color:var(--bronze);border-top-color:var(--bronze)}
+.nav svg{width:22px;height:22px;display:block}
+
+/* ---------- štatistiky ---------- */
+.catrow{display:flex;align-items:center;gap:10px;margin-top:12px}
+.catrow .nmm{flex:0 0 96px;font-family:var(--font-d);font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--ash)}
+.bar{flex:1;height:14px;background:var(--stone-2);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--bronze)}
+.catrow .nn{flex:0 0 52px;text-align:right;font-variant-numeric:tabular-nums;font-size:14px;color:var(--bone)}
+.gridwrap{overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.cal{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,12px);gap:3px;width:max-content}
+.cal i{width:12px;height:12px;border-radius:2px;background:#1A1C21}
+.cal i.d{background:var(--bronze)}
+.cal i.f{background:var(--blood)}
+.cal i.t{box-shadow:0 0 0 2px var(--bone)}
+.legend{display:flex;gap:14px;margin-top:10px;font-size:12px;color:var(--ash);flex-wrap:wrap}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend b{width:11px;height:11px;border-radius:2px;display:block}
+
+/* ---------- denník ---------- */
+.entry{border-bottom:1px solid var(--line);padding:14px 0}
+.entry:last-child{border-bottom:none}
+.entry .dt{font-family:var(--font-d);font-size:13px;letter-spacing:.1em;color:var(--bronze);text-transform:uppercase}
+.entry .ti{font-family:var(--font-d);font-size:18px;margin:4px 0 6px;color:var(--bone)}
+.entry .rf{font-size:14px;color:var(--ash);margin-top:8px;white-space:pre-wrap}
+.entry .rf b{color:var(--bone);font-weight:600}
+.badge{font-family:var(--font-d);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border-radius:3px}
+.badge.d{background:var(--bronze);color:#14100A}
+.badge.f{background:var(--blood);color:var(--bone)}
+
+/* ---------- text ---------- */
+.prose p{margin-bottom:12px;color:#D8D4CC}
+.prose h3{font-size:17px;color:var(--bronze);margin:20px 0 8px}
+.prose ul{margin:0 0 12px;padding-left:20px;color:#D8D4CC}
+.prose li{margin-bottom:7px}
+.quote{font-family:var(--font-d);font-size:21px;line-height:1.3;font-weight:500;color:var(--bone)}
+.quote-src{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--bronze);margin-top:10px;font-family:var(--font-d)}
+.quote-mean{margin-top:12px;color:var(--ash);font-size:15px}
+.hint{font-size:13px;color:var(--ash);margin-top:8px}
+.center{text-align:center}
+
+/* ---------- prekrytia ---------- */
+.ovl{position:fixed;inset:0;z-index:50;background:rgba(6,6,7,.97);display:flex;align-items:center;justify-content:center;padding:24px;overflow-y:auto}
+.ovl-in{
+  width:100%;max-width:420px;text-align:center;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+.count{font-family:var(--font-d);font-size:92px;font-weight:700;line-height:1;color:var(--bronze);font-variant-numeric:tabular-nums}
+.shield{width:132px;height:154px;margin:0 auto}
+@media (prefers-reduced-motion:no-preference){
+  .pop{animation:pop .5s cubic-bezier(.2,.9,.3,1.2) both}
+  .fade{animation:fade .35s ease both}
+}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.toast{
+  position:fixed;left:50%;transform:translateX(-50%);
+  bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:40;
+  background:var(--stone-2);border:1px solid var(--bronze-dim);border-radius:4px;
+  padding:12px 16px;font-size:14px;max-width:calc(100% - 32px);text-align:center;
+}
+.err{background:#1A1113;border:1px solid var(--blood);border-radius:4px;padding:12px;font-size:14px;color:#E8C9B6;margin-bottom:14px}
+.sch{display:grid;grid-template-columns:52px 1fr;gap:8px;align-items:center;margin-bottom:8px}
+.sch span{font-family:var(--font-d);font-size:13px;text-transform:uppercase;color:var(--ash)}
+.sch select{min-height:48px;margin:0}
+</style>
+
+<div id="app">
+  <header class="top">
+    <svg class="crest" viewBox="0 0 34 40" aria-hidden="true">
+      <path d="M17 1 2 6v14c0 9 7 15.5 15 19 8-3.5 15-10 15-19V6L17 1z" fill="#1D1F24" stroke="#C08E45" stroke-width="1.6"/>
+      <path d="M17 7v24" stroke="#8A6630" stroke-width="1.2"/>
+      <path d="M8 13h18M9.5 20h15" stroke="#8A6630" stroke-width="1.2"/>
+    </svg>
+    <div class="brand">
+      <div class="nm">AGOGÉ</div>
+      <div class="sub">Spartánsky denník</div>
+    </div>
+    <button class="modebtn" id="modeBtn" type="button">–</button>
+  </header>
+
+  <div id="storeErr" hidden class="err"></div>
+
+  <div class="rankbar">
+    <div><div class="k">Hodnosť</div><div class="v" id="hRank">–</div></div>
+    <div><div class="k">Séria</div><div class="v" id="hStreak">–</div></div>
+    <div><div class="k">Splnené</div><div class="v" id="hTotal">–</div></div>
+  </div>
+
+  <main id="vDnes"></main>
+  <main id="vDennik" hidden></main>
+  <main id="vStat" hidden></main>
+  <main id="vInfo" hidden></main>
+</div>
+
+<nav class="nav" aria-label="Hlavná navigácia">
+  <button type="button" data-v="Dnes" aria-current="page">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 2 3 5v8c0 5.5 4.2 9.3 9 11 4.8-1.7 9-5.5 9-11V5l-9-3z"/><path d="M12 7v9M8 11h8"/></svg>
+    Dnes
+  </button>
+  <button type="button" data-v="Dennik">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 3h12a2 2 0 0 1 2 2v16H7a2 2 0 0 1-2-2V3z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>
+    Denník
+  </button>
+  <button type="button" data-v="Stat">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H3"/></svg>
+    Postup
+  </button>
+  <button type="button" data-v="Info">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.6v.2"/></svg>
+    Prečo
+  </button>
+</nav>
+
+<div id="ovl"></div>
+<div id="toast"></div>
+
+<script>
+"use strict";
+/* ===================================================================
+   AGOGÉ – Spartánsky denník
+   Jeden súbor, žiadne externé dáta. Všetko sa ukladá v tomto prehliadači.
+   =================================================================== */
+
+/* ---------- 1. DATABÁZA VÝZIEV (60) -------------------------------
+   c  = kategória: A telo a chlad / B disciplína a pôst / C myseľ a zvyky
+   l  = úroveň 1–3
+   p  = miesto: 'vsade' | 'ubytovna' (dá sa aj na ubytovni v Nemecku) | 'doma'
+   f  = pôst (nedávať v deň silového alebo tvrdého/dlhého behu)
+   h  = fyzicky náročné (nedávať v deň silového alebo tvrdého tréningu)
+   s  = bezpečnostná poznámka
+------------------------------------------------------------------- */
+var COLD = "Chlad budujeme postupne. Nikdy nezadržuj dych pod vodou a nikdy sa neotužuj sám v rieke, jazere alebo bazéne. Keď ti tuhnú ruky alebo sa nekontrolovane trasieš, skonči.";
+var FAST = "Pôst nikdy v deň silového tréningu, intervalov ani dlhého behu. Pi vodu. Keď sa ti krúti hlava alebo vynecháva výkon v práci, najedz sa.";
+var PAIN = "Nepohodlie áno, bolesť nie. Keď niečo ostro bolí, prestaň.";
+
+var CH = [
+/* ===== A) TELO A CHLAD – úroveň 1 ===== */
+{id:"A1",c:"A",l:1,p:"ubytovna",t:"Studená voda 30 sekúnd",d:"Osprchuj sa normálne teplou vodou. Na konci otoč na úplne studenú a vydrž 30 sekúnd. Dýchaj pomaly nosom, ramená dole, nekrič.",dur:"30 sekúnd",w:"Naučíš telo, že nepríjemné sa dá prežiť v pokoji – a to sa prenesie do celého dňa.",s:COLD},
+{id:"A2",c:"A",l:1,p:"vsade",t:"Prechádzka v zlom počasí",d:"Obleč sa, vypni slúchadlá, mobil nechaj v kapse. 15 minút chôdze v tom, čo je za oknom – dážď, vietor, zima, tma.",dur:"15 minút",w:"Keď prestaneš čakať na dobré podmienky, prestaneš mať výhovorky.",s:""},
+{id:"A3",c:"A",l:1,p:"vsade",t:"Celý deň len schody",d:"Dnes ani raz výťah. Ani v práci, ani v obchode, ani na ubytovni. Každé schody vyjdi pešo.",dur:"celý deň",w:"Malé rozhodnutie zopakované dvadsaťkrát za deň je silnejšie ako jedno veľké.",s:""},
+{id:"A4",c:"A",l:1,p:"ubytovna",t:"Podrep pri stene 3× 30 sekúnd",d:"Oprete sa chrbtom o stenu, stehná vodorovne, kolená nad chodidlami. 30 sekúnd výdrž, minúta pauza, trikrát.",dur:"5 minút",w:"Naučíš sa ostať v nepohodlí aj vtedy, keď ti hlava hovorí „dosť“.",s:PAIN},
+{id:"A5",c:"A",l:1,p:"ubytovna",t:"Poloha na lakťoch 3× 30 sekúnd",d:"Predloktia na zemi, telo v jednej priamke, zadok nedvíhaj. 30 sekúnd, minúta pauza, trikrát.",dur:"5 minút",w:"Odolnosť sa cvičí v sekundách, keď je to najnepríjemnejšie.",s:PAIN},
+{id:"A6",c:"A",l:1,p:"ubytovna",t:"20 klikov hneď po prebudení",d:"Nohy na zemi, žiadny mobil, žiadna káva. Prvá vec dňa je 20 klikov. Môžeš aj v niekoľkých sériách.",dur:"2 minúty",w:"Prvý krok dňa rozhoduje, kto dnes vedie – ty alebo pohodlie.",s:""},
+{id:"A7",c:"A",l:1,p:"ubytovna",t:"Studená tvár a šija",d:"Pusti studenú vodu na tvár, zápästia a zadnú časť šije. 60 sekúnd striedavo. Dýchaj pomaly.",dur:"2 minúty",w:"Naučíš sa upokojiť telo zámerne, nie len čakať, kým sa upokojí samo.",s:COLD},
+
+/* ===== A) úroveň 2 ===== */
+{id:"A8",c:"A",l:2,p:"ubytovna",t:"Studená sprcha 60 sekúnd",d:"Na konci sprchy otoč na studenú a vydrž celú minútu. Nechaj vodu tiecť aj na chrbát a šiju, nie len na nohy.",dur:"60 sekúnd",w:"Keď si ráno dobrovoľne vyberieš nepohodlie, zvyšok dňa ti už toľko nehýbe.",s:COLD},
+{id:"A9",c:"A",l:2,p:"vsade",t:"Beh 20 minút bez slúchadiel",d:"Žiadna hudba, žiadny podcast. Len tvoj dych a kroky. Pomalé tempo stačí – ide o ticho, nie o výkon.",dur:"20 minút",w:"Keď nemáš čím prehlušiť nepohodlie, naučíš sa byť v ňom.",s:""},
+{id:"A10",c:"A",l:2,p:"ubytovna",t:"Kliky do zlyhania",d:"Jedna séria klikov, kým ti drží forma. Keď sa začne prehýbať zadok alebo klesať hlava, skonči. Zapíš si počet.",dur:"3 minúty",h:true,w:"Naučíš sa poznať rozdiel medzi „nechce sa mi“ a „už naozaj nemôžem“.",s:PAIN},
+{id:"A11",c:"A",l:2,p:"doma",t:"Bosé chodenie po rose",d:"Vyjdi na dvor alebo do trávy bosý. 10 minút chôdze – ráno v rose alebo večer v mokrej tráve.",dur:"10 minút",w:"Chodidlá a chlad ťa vrátia do tela a vypnú hlavu bez jediného slova.",s:"Pozor na sklo, kamene a ostré veci. Pri rannom mraze maximálne 2–3 minúty."},
+{id:"A12",c:"A",l:2,p:"ubytovna",t:"Podrep pri stene 2× 60 sekúnd",d:"Stehná vodorovne, chrbát na stene, ruky nepodopierajú. Minútu vydrž, dve minúty pauza, ešte raz.",dur:"6 minút",w:"Posledných pätnásť sekúnd je celý tréning – tam sa láme vôľa.",s:PAIN},
+{id:"A13",c:"A",l:2,p:"vsade",t:"Pešo namiesto auta",d:"Jednu dnešnú cestu, ktorú by si išiel autom, choď pešo. Aspoň 25 minút chôdze, bez slúchadiel.",dur:"25 minút",w:"Pohodlie je tichý zlodej. Dnes mu jednu cestu nedáš.",s:""},
+{id:"A14",c:"A",l:2,p:"ubytovna",t:"Poloha na lakťoch 3× 60 sekúnd",d:"Telo v priamke, brucho vtiahnuté, dýchaj. Minútu výdrž, minútu pauza, trikrát.",dur:"7 minút",h:true,w:"Odolnosť nie je o sile. Je o tom, že neustúpiš, keď to začne páliť.",s:PAIN},
+{id:"A15",c:"A",l:2,p:"ubytovna",t:"100 klikov počas dňa",d:"Rozdeľ si 100 klikov do celého dňa. Po 10, po 20, kedykoľvek. Večer musí byť stovka hotová.",dur:"15 minút spolu",h:true,w:"Veľké čísla sa nerobia naraz. Robia sa tým, že sa k nim vraciaš.",s:PAIN},
+
+/* ===== A) úroveň 3 ===== */
+{id:"A16",c:"A",l:3,p:"ubytovna",t:"Celá sprcha studená",d:"Žiadna teplá voda. Vstúp do studenej a vydrž 2 až 3 minúty. Dýchaj pomaly nosom, nezadržuj dych.",dur:"2–3 minúty",w:"Prvých desať sekúnd je panika. Keď ich zvládneš v pokoji, zvládneš aj ten zvyšok života.",s:COLD},
+{id:"A17",c:"A",l:3,p:"vsade",t:"30 minút behu v nečase",d:"Dážď, vietor, zima. Bez slúchadiel. 30 minút pokojným tempom. Nie je to tréning, je to rozhodnutie.",dur:"30 minút",w:"Kto beží aj vtedy, keď sa mu nechce, nepotrebuje motiváciu.",s:"V mraze a vlhku si chráň ruky a uši. Po príchode sa hneď prezleč do suchého."},
+{id:"A18",c:"A",l:3,p:"doma",t:"Pochod s batohom 45 minút",d:"Batoh 8–10 kg (voda, piesok, knihy). 45 minút rýchlej chôdze v teréne, bez slúchadiel, bez prestávky.",dur:"45 minút",h:true,w:"Záťaž na chrbte ťa naučí, že sa dá ísť ďalej aj keď je ťažko.",s:"Batoh musí sedieť na chrbte, nie visieť na ramenách. Pri bolesti chrbta alebo kolien ukonči."},
+{id:"A19",c:"A",l:3,p:"ubytovna",t:"Blok výdrže",d:"Podrep pri stene 3× 90 sekúnd a poloha na lakťoch 3× 60 sekúnd. Striedaj ich, medzi sériami minúta pauza.",dur:"15 minút",h:true,w:"Telo sa vzdáva až dávno po tom, čo sa vzdá hlava. Dnes to zistíš.",s:PAIN},
+{id:"A20",c:"A",l:3,p:"ubytovna",t:"Ranný blok bez pohodlia",d:"Hneď po budíku: 5 minút rozcvička, 30 klikov, potom 90 sekúnd studenej sprchy. V tomto poradí, bez mobilu.",dur:"15 minút",w:"Keď prvých pätnásť minút dňa vyhráš, deň už nemá čím ťa zlomiť.",s:COLD},
+
+/* ===== B) DISCIPLÍNA A PÔST – úroveň 1 ===== */
+{id:"B1",c:"B",l:1,p:"ubytovna",t:"Prvý budík, nohy na zemi",d:"Žiadny odklad. Budík zazvoní, do piatich sekúnd si na nohách a stojíš. Telefón nechaj ležať.",dur:"5 sekúnd",w:"Prvé rozhodnutie dňa si urobil ty, nie tvoja únava.",s:""},
+{id:"B2",c:"B",l:1,p:"ubytovna",t:"Deň bez pridaného cukru",d:"Žiadne sladkosti, keksy, sladené nápoje, čokoláda ani cukor do kávy. Ovocie a normálne jedlo áno.",dur:"celý deň",w:"Cukor je najčastejšia malá kapitulácia dňa. Keď ju vynecháš, vidíš, kto tu rozhoduje.",s:""},
+{id:"B3",c:"B",l:1,p:"ubytovna",t:"Prvých 30 minút bez mobilu",d:"Po prebudení 30 minút žiadna obrazovka. Žiadne správy, žiadne správy zo sveta. Len ty, voda a rozcvička.",dur:"30 minút",w:"Keď ráno nepustíš cudzie hlasy do hlavy, celý deň myslíš po svojom.",s:""},
+{id:"B4",c:"B",l:1,p:"ubytovna",t:"Jedno jedlo bez obrazovky",d:"Jedno dnešné jedlo zjedz bez telefónu, bez televízora, bez videa. Sedíš, ješ, cítiš, čo ješ.",dur:"20 minút",w:"Keď sa naučíš byť pri jedle, naučíš sa byť aj pri ťažších veciach.",s:""},
+{id:"B5",c:"B",l:1,p:"ubytovna",t:"Pôst 12 hodín",d:"Posledné jedlo napríklad o 20:00, prvé o 08:00. Medzitým len voda, čierna káva alebo čaj bez cukru.",dur:"12 hodín",f:true,w:"Hlad nie je nepriateľ. Je to pocit, ktorý príde a odíde – a ty medzitým robíš svoje.",s:FAST},
+{id:"B6",c:"B",l:1,p:"ubytovna",t:"30 minút pred spaním bez obrazovky",d:"Poslednú polhodinu dňa žiadny telefón. Odlož ho mimo dosah ruky. Namiesto toho kniha, zápisník alebo ticho.",dur:"30 minút",w:"Ako končíš deň, tak začínaš ten ďalší.",s:""},
+{id:"B7",c:"B",l:1,p:"ubytovna",t:"Prvá káva až po 10:00",d:"Do desiatej len voda. Káva nie je zakázaná, len odložená. Všimni si, čo ti telo hovorí medzitým.",dur:"dopoludnia",w:"Keď raz odložíš niečo, čo chceš hneď, ovládaš sa aj inde.",s:""},
+
+/* ===== B) úroveň 2 ===== */
+{id:"B8",c:"B",l:2,p:"ubytovna",t:"Mobil až po 9:00",d:"Žiadna obrazovka do deviatej. Hovory áno, keď treba kvôli práci. Žiadne appky, žiadne správy, žiadne video.",dur:"do 9:00",w:"Prvé tri hodiny dňa patria tebe. Nikomu inému.",s:""},
+{id:"B9",c:"B",l:2,p:"ubytovna",t:"Pôst 14 hodín",d:"Napríklad od 19:00 do 09:00. Len voda, čierna káva alebo čaj bez cukru. Ráno nič, kým neuplynie čas.",dur:"14 hodín",f:true,w:"Naučíš sa, že nemusíš okamžite vyhovieť každému nutkaniu.",s:FAST},
+{id:"B10",c:"B",l:2,p:"ubytovna",t:"Deň bez cukru a sladkých nápojov",d:"Žiadny pridaný cukor, žiadne sladené a energetické nápoje, žiadne biele pečivo a sladké mliečne výrobky.",dur:"celý deň",w:"Keď si deň uvaríš sám, prestaneš byť v ňom návštevou.",s:""},
+{id:"B11",c:"B",l:2,p:"ubytovna",t:"Studená voda namiesto kávy do obeda",d:"Do obeda žiadna káva, žiadny energeťák. Len studená voda. Dopoludnia funguješ na sebe, nie na kofeíne.",dur:"dopoludnia",w:"Uvidíš, koľko z tvojej energie je naozaj tvoja.",s:"Ak si zvyknutý na veľa kávy, prvý deň môže bolieť hlava. Pi viac vody. Pri silnom nepokoji si kávu daj."},
+{id:"B12",c:"B",l:2,p:"ubytovna",t:"Deň bez sociálnych sietí",d:"Celý deň žiadny Facebook, Instagram, TikTok, YouTube na scrollovanie. Appky zmaž z plochy alebo vypni notifikácie.",dur:"celý deň",w:"Keď prestaneš pozerať na cudzie životy, zostane ti čas na svoj.",s:""},
+{id:"B13",c:"B",l:2,p:"ubytovna",t:"Všetky jedlá bez obrazovky",d:"Dnes každé jedlo bez telefónu a televízora. Sadneš, odložíš mobil mimo dosah, ješ.",dur:"celý deň",w:"Pozornosť je tvoj najdrahší nástroj. Dnes ju nerozdáš zadarmo.",s:""},
+{id:"B14",c:"B",l:2,p:"ubytovna",t:"Mobil v inej miestnosti na noc",d:"Od 21:00 je telefón mimo spálne. Budík si nastav na mobile v inej miestnosti alebo si kúp obyčajný budík.",dur:"celú noc",w:"Keď prvá vec po prebudení nie je obrazovka, ráno patrí tebe.",s:""},
+
+/* ===== B) úroveň 3 ===== */
+{id:"B15",c:"B",l:3,p:"ubytovna",t:"Pôst 16 hodín",d:"Napríklad od 19:00 do 11:00. Len voda, čierna káva alebo čaj. Rob svoje veci, nesleduj hodiny.",dur:"16 hodín",f:true,w:"Keď vydržíš bez toho, čo si zvyknutý mať hneď, prestaneš byť riadený zvykom.",s:FAST},
+{id:"B16",c:"B",l:3,p:"ubytovna",t:"Deň bez cukru, alkoholu a kofeínu",d:"Celý deň žiadny pridaný cukor, žiadny alkohol, žiadna káva ani energeťák. Voda, jedlo, práca.",dur:"celý deň",w:"Deň bez chemických pomôcok ti ukáže tvoju skutočnú úroveň.",s:"Ak piješ denne veľa kávy, priprav sa na bolesť hlavy. Pi veľa vody. Toto nie je deň na tvrdý tréning."},
+{id:"B17",c:"B",l:3,p:"ubytovna",t:"Mobil len na telefonovanie",d:"Celý deň telefón slúži len na hovory a pracovné správy. Žiadne appky, žiadne prehliadanie, žiadne video.",dur:"celý deň",w:"Zistíš, že väčšina toho, čo „musíš“ pozrieť, nebola potrebná.",s:""},
+{id:"B18",c:"B",l:3,p:"ubytovna",t:"Vstať o 5:30 a hneď pracovať na sebe",d:"Budík 5:30, žiadny odklad. Prvých 20 minút práca na sebe: čítanie, plán, rozcvička. Mobil až potom.",dur:"20 minút",w:"Ráno je jediný čas, ktorý ti nikto nevezme – ak si ho vezmeš prvý.",s:"Ak si včera spal menej ako 6 hodín, vynechaj to a dnes si poď skôr ľahnúť. Spánok nie je slabosť."},
+{id:"B19",c:"B",l:3,p:"vsade",t:"Bez mobilu do 12:00",d:"Celé dopoludnie žiadna obrazovka. Hovory len keď naozaj treba kvôli práci. Žiadne správy, žiadne appky.",dur:"do obeda",w:"Polovicu dňa zvládneš bez toho, čo si považoval za nevyhnutné.",s:""},
+{id:"B20",c:"B",l:3,p:"ubytovna",t:"Tvrdý deň disciplíny",d:"Pôst 16 hodín, žiadny pridaný cukor a všetky jedlá bez obrazovky. Tri pravidlá, jeden deň, bez výnimky.",dur:"celý deň",f:true,w:"Keď zvládneš tri pravidlá naraz, prestaneš veriť, že jedno je príliš.",s:FAST},
+
+/* ===== C) MYSEĽ A ZVYKY – úroveň 1 ===== */
+{id:"C1",c:"C",l:1,p:"ubytovna",t:"5 minút v tichu",d:"Sadni si, nastav si časomieru na 5 minút a nerob nič. Žiadna hudba, žiadny mobil. Myšlienky nechaj prejsť.",dur:"5 minút",w:"Kto vydrží sám so sebou päť minút, nemusí utekať pred vlastnou hlavou.",s:""},
+{id:"C2",c:"C",l:1,p:"ubytovna",t:"Tri strachy a tri kroky",d:"Napíš na papier tri veci, z ktorých máš teraz strach. Ku každej jeden malý krok, ktorý vieš urobiť tento týždeň.",dur:"10 minút",w:"Strach napísaný na papieri sa zmenší. Strach v hlave rastie.",s:""},
+{id:"C3",c:"C",l:1,p:"ubytovna",t:"Čo sa dnes môže pokaziť",d:"Napíš tri veci, ktoré sa dnes môžu pokaziť. Ku každej jednu vetu: ako na to zareagujem. Nič viac.",dur:"10 minút",w:"Keď si nešťastie predstavíš vopred, nezaskočí ťa – a ty si už vybral, ako odpovieš.",s:""},
+{id:"C4",c:"C",l:1,p:"ubytovna",t:"10 strán knihy",d:"Papierová kniha alebo čítačka, nie telefón. Desať strán bez prerušenia. Mobil v inej miestnosti.",dur:"15 minút",w:"Súvislá pozornosť je sila, ktorá sa stráca zo sveta. Ty si ju dnes udržíš.",s:""},
+{id:"C5",c:"C",l:1,p:"vsade",t:"Najnepríjemnejšia vec ako prvá",d:"Napíš si, čo je dnes najnepríjemnejšia úloha. Urob ju ako prvú, pred všetkým ostatným. Hneď.",dur:"podľa úlohy",w:"To, čo odkladáš, ťa ťahá celý deň. Keď to zvládneš ráno, deň je zrazu ľahký.",s:""},
+{id:"C6",c:"C",l:1,p:"ubytovna",t:"Jeden sľub sebe",d:"Ráno napíš jednu vetu – jeden malý sľub na dnes. Večer sa k nej vráť a priznaj si, či si ho dodržal.",dur:"5 minút",w:"Dôvera v seba sa buduje z dodržaných malých sľubov, nie z veľkých plánov.",s:""},
+{id:"C7",c:"C",l:1,p:"ubytovna",t:"Večer 5 minút ticha",d:"Pred spaním päť minút bez obrazovky a bez hudby. Sedíš alebo ležíš a necháš deň dobehnúť.",dur:"5 minút",w:"Keď deň uzavrieš sám, neuzavrie ho za teba cudzie video.",s:""},
+
+/* ===== C) úroveň 2 ===== */
+{id:"C8",c:"C",l:2,p:"ubytovna",t:"10 minút v tichu",d:"Desať minút bez podnetov. Len sedíš a dýchaš. Keď myšlienka príde, všimni si ju a nechaj ju prejsť.",dur:"10 minút",w:"Ticho je najnepríjemnejšia vec pre nepokojnú hlavu – a najlepší tréning pre ňu.",s:""},
+{id:"C9",c:"C",l:2,p:"ubytovna",t:"20 strán knihy",d:"Dvadsať strán naraz, bez telefónu v dosahu ruky. Keď sa ti myseľ vzpiera, čítaj ďalej.",dur:"25 minút",w:"Dvadsať strán denne je tridsaťtri kníh za rok. Odolnosť sa počíta v opakovaniach.",s:""},
+{id:"C10",c:"C",l:2,p:"ubytovna",t:"Čo mám a čo nemám pod kontrolou",d:"Rozdeľ papier na dve polovice. Vľavo napíš, čo ťa teraz ťaží a nemáš pod kontrolou. Vpravo to, čo pod kontrolou máš.",dur:"10 minút",w:"Epiktétos: trápime sa najviac vecami, s ktorými nemôžeme nič urobiť. Dnes ich rozlíšiš.",s:""},
+{id:"C11",c:"C",l:2,p:"vsade",t:"Jedna odložená vec celá",d:"Vyber jednu vec, ktorú odkladáš už viac ako týždeň. Dnes ju dokonči celú. Nie začni – dokonči.",dur:"podľa úlohy",w:"Každá odložená vec ti berie energiu potichu. Jedna dokončená ti ju vráti celú.",s:""},
+{id:"C12",c:"C",l:2,p:"ubytovna",t:"List sebe o päť rokov",d:"Napíš ručne list sebe o päť rokov. Čo chceš, aby bolo pravda. Čo preto dnes robíš. Krátko a bez fráz.",dur:"15 minút",w:"Keď vieš, kam ideš, prestaneš sa hádať sám so sebou o každom kroku.",s:""},
+{id:"C13",c:"C",l:2,p:"vsade",t:"Deň bez sťažovania",d:"Celý deň sa ani raz nahlas nesťažuj. Na počasie, prácu, ľudí, nič. Keď ti to ujde, zapíš si to.",dur:"celý deň",w:"Sťažovanie je zvyk, nie pravda. Keď ho vypneš, zistíš, čo sa dá naozaj zmeniť.",s:""},
+{id:"C14",c:"C",l:2,p:"ubytovna",t:"Zajtrajšok na papier",d:"Večer 10 minút: napíš tri veci, ktoré zajtra naozaj urobíš, a kedy. Nie zoznam želaní – plán.",dur:"10 minút",w:"Ráno nemá byť čas na rozhodovanie. Má byť čas na konanie.",s:""},
+
+/* ===== C) úroveň 3 ===== */
+{id:"C15",c:"C",l:3,p:"ubytovna",t:"20 minút v tichu",d:"Dvadsať minút bez podnetov. Žiadna hudba, žiadny mobil, žiadne čítanie. Len ty a tvoja hlava.",dur:"20 minút",w:"Kto vydrží dvadsať minút sám so sebou, nepotrebuje už nič prehlušovať.",s:""},
+{id:"C16",c:"C",l:3,p:"ubytovna",t:"Najhorší týždeň na papieri",d:"Napíš, čo najhoršie sa môže tento týždeň stať – v práci, s domom, s rodinou, so zdravím. Ku každému bodu konkrétny plán.",dur:"15 minút",w:"Stoici to robili zámerne: kto si nešťastie predstavil vopred, nestratí hlavu, keď príde.",s:"Ak ťa to zmení na úzkosť namiesto plánu, skonči a napíš len jednu vec, ktorú dnes vieš urobiť."},
+{id:"C17",c:"C",l:3,p:"ubytovna",t:"30 strán knihy",d:"Tridsať strán v jednom sedení. Mobil v inej miestnosti. Keď sa stratíš, vráť sa o odsek a čítaj znova.",dur:"40 minút",w:"Hlboká pozornosť je dnes vzácnejšia ako sila. Dnes ju trénuješ naplno.",s:""},
+{id:"C18",c:"C",l:3,p:"vsade",t:"Deň bez sťažovania a výhovoriek",d:"Nesťažuj sa a nevymlúvaj sa. Pri každej výhovorke, ktorá ti ujde, si ju zapíš do mobilu alebo na papier.",dur:"celý deň",w:"Keď vidíš svoje výhovorky napísané, prestanú ti znieť rozumne.",s:""},
+{id:"C19",c:"C",l:3,p:"vsade",t:"Rozhovor, ktorý odkladáš",d:"Je jeden rozhovor, ktorý odkladáš – doma, v práci, s niekým blízkym. Dnes ho začni ty. Krátko, priamo, bez obvinení.",dur:"podľa rozhovoru",w:"Veci, ktorým sa vyhýbaš, určujú tvoj život viac ako tie, ktoré robíš.",s:""},
+{id:"C20",c:"C",l:3,p:"doma",t:"Hodina bez obrazoviek po prebudení",d:"Prvú hodinu dňa žiadna obrazovka. Zápisník, plán dňa, ticho, rozcvička. Telefón zapneš až po hodine.",dur:"60 minút",w:"Kto vlastní prvú hodinu dňa, vlastní celý deň.",s:""}
+];
+
+/* ---------- 2. TÝŽDENNÉ AGOGÉ VÝZVY ---------- */
+var WEEKLY = [
+{id:"W1",t:"Pochod s batohom",d:"Batoh 8–12 kg a dve hodiny chôdze v teréne. Bez slúchadiel, bez dlhej prestávky. Len voda a kroky.",dur:"2 hodiny",h:true,w:"Dlhý tichý pochod ťa naučí, že únava nie je dôvod zastaviť.",s:"Batoh musí sedieť na chrbte, nie na ramenách. Pri bolesti chrbta alebo kolien skonči a vráť sa domov."},
+{id:"W2",t:"Celý deň bez mobilu",d:"Od rána do večera telefón vypnutý alebo v zásuvke. Povedz to vopred žene. Jeden deň, žiadna výnimka okrem naozajstnej núdze.",dur:"celý deň",w:"Zistíš, že svet beží aj bez toho, aby si ho sledoval.",s:""},
+{id:"W3",t:"24 hodín bez cukru",d:"Celých 24 hodín žiadny pridaný cukor, žiadne sladené a energetické nápoje, žiadne sladkosti. Ani kúsok.",dur:"24 hodín",w:"Jeden deň bez cukru ti ukáže, ako často si bral automaticky.",s:""},
+{id:"W4",t:"Tri hodiny na dome bez mobilu",d:"Ráno 5:30 budík. Tri hodiny práce na dome bez mobilu v kapse a bez prestávky na obrazovku. Hudba môže byť, obrazovka nie.",dur:"3 hodiny",w:"Súvislá práca bez prerušenia je zručnosť, ktorá sa dnes stráca. Dnes si ju precvičíš.",s:PAIN},
+{id:"W5",t:"Chlad a dlhá chôdza",d:"Ráno studená sprcha 3 minúty. Potom 90 minút chôdze v prírode bez slúchadiel a bez mobilu v ruke.",dur:"2 hodiny",w:"Chlad na začiatku a ticho potom – to je celý tréning odolnosti v jednom dopoludní.",s:COLD},
+{id:"W6",t:"Ticho do obeda",d:"Od prebudenia do obeda žiadna hudba, podcasty, rádio, televízor. Rozprávať sa môžeš. Prehlušovať sa nemôžeš.",dur:"do obeda",w:"Keď prestaneš zapĺňať každé ticho, začneš slyšať, čo naozaj potrebuješ.",s:""},
+{id:"W7",t:"Pôst 18 hodín v deň voľna",d:"Len vo dni bez tréningu. Napríklad od 19:00 do 13:00. Voda, čierna káva, čaj. Popoludní hodina chôdze.",dur:"18 hodín",f:true,w:"Dlhší pôst ti ukáže, že hlad je vlna – príde, prejde, a ty medzitým žiješ.",s:FAST},
+{id:"W8",t:"Deň bez pohodlia",d:"Všetko v jednom dni: studená sprcha, žiadny cukor, žiadne sociálne siete, 20 strán knihy a dve hodiny fyzickej práce.",dur:"celý deň",w:"Keď raz zvládneš celý deň bez pohodlia, prestaneš sa báť bežného dňa.",s:COLD}
+];
+
+/* ---------- 3. MYŠLIENKY DŇA ---------- */
+var QUOTES = [
+{q:"Trp a buď silný. Táto bolesť bude niekedy pre teba užitočná.",a:"Ovídius / Seneca, O duševnom pokoji",m:"To, čo ťa dnes tlačí, ti zajtra poslúži. Neuteká sa pred tým."},
+{q:"Nie preto sa neodvážime, že je to ťažké. Ťažké je to preto, že sa neodvážime.",a:"Seneca, Listy Luciliovi",m:"Väčšina vecí je ťažká len dovtedy, kým ich začneš."},
+{q:"Nikto nie je slobodný, kto neovláda sám seba.",a:"Epiktétos",m:"Dnes to nie je o okolnostiach. Je to o tom, čo si vyberieš ty."},
+{q:"Nie veci nás rozhadzujú, ale naše názory na ne.",a:"Epiktétos, Rukoväť",m:"Studená voda nie je zlá. Zlý je príbeh, ktorý si o nej povieš."},
+{q:"Máš moc nad svojou mysľou, nie nad vonkajšími vecami. V tom je tvoja sila.",a:"Marcus Aurelius, Myšlienky",m:"Počasie, práca, ľudia – to neriadiš. Svoju reakciu áno."},
+{q:"Nestrácaj čas hádkami o tom, aký má byť dobrý muž. Buď ním.",a:"Marcus Aurelius, Myšlienky",m:"Dnes žiadne plánovanie seba. Len jedna vec urobená."},
+{q:"Začni robiť to, čo chceš byť. Potom to rob stále.",a:"Epiktétos",m:"Nie si taký, aký sa cítiš. Si taký, čo robíš opakovane."},
+{q:"Ťažkosti ukazujú, čo v človeku je.",a:"Epiktétos",m:"Dnešná výzva nie je trest. Je to zrkadlo."},
+{q:"Je lepšie zvíťaziť nad sebou ako nad tisícom bitiek.",a:"stoická zásada podľa Senecu",m:"Najdôležitejší súper dnešného dňa si ty ráno v posteli."},
+{q:"Zvykni si na nepohodlie, kým nie si v tiesni. Potom ti bude slúžiť.",a:"Seneca, Listy Luciliovi",m:"Preto to robíš dnes – aby si bol pripravený, keď to prijde samo."},
+{q:"Ako dlho ešte odkladáš to, čo od seba chceš?",a:"Epiktétos, Rukoväť",m:"Tá jedna vec, čo ťa ťahá už týždeň. Dnes."},
+{q:"Konaj, akoby si mal zomrieť teraz. Prestaň čakať.",a:"Marcus Aurelius, Myšlienky",m:"Dnešný deň nie je skúška pred ostrým. Je to to ostré."},
+{q:"Žiaden človek nie je zlomený osudom, ktorý naňho bol pripravený.",a:"Seneca, O prozreteľnosti",m:"Preto si predstavuješ, čo sa môže pokaziť. Aby ťa to nezrazilo."},
+{q:"Oheň skúša zlato, bieda silných ľudí.",a:"Seneca, O prozreteľnosti",m:"Nepohodlie nie je prekážka v tréningu. Je to tréning."},
+{q:"Nie je dôležité, čo znášaš, ale ako to znášaš.",a:"Seneca, Listy Luciliovi",m:"Dve minúty v studenej vode v pokoji sú viac ako päť v panike."},
+{q:"Buď ako skala, do ktorej bijú vlny. Stojí a voda sa utíši okolo nej.",a:"Marcus Aurelius, Myšlienky",m:"Dnes nemusíš nič vyhrať. Stačí stáť."},
+{q:"Veľkú časť života strácame tým, že robíme veci zle, a väčšinu tým, že nerobíme nič.",a:"Seneca, O krátkosti života",m:"Pätnásť minút dnes je viac ako dokonalý plán na pondelok."},
+{q:"Nepýtaj sa, aby sa veci diali, ako chceš. Chci, aby sa diali tak, ako sa dejú.",a:"Epiktétos, Rukoväť",m:"Dážď nie je výhovorka. Je to súčasť plánu."},
+{q:"Každý deň si môžeš začať znova.",a:"Marcus Aurelius, Myšlienky",m:"Včera nič neznamená. Dnes je nový rozkaz."},
+{q:"Prestaň sa rozprávať o tom, čím by mal dobrý človek byť, a buď ním.",a:"Marcus Aurelius, Myšlienky",m:"Appku si otvoril. Teraz ju zavri a choď to urobiť."}
+];
+
+/* ---------- 4. TVRDÝ TÓN (ráno a pri výzve) ---------- */
+var BARKS = [
+"Žiadne výhovorky. Toto je rozkaz dňa. Teraz.",
+"Nemusíš mať chuť. Musíš to urobiť.",
+"Dvadsať minút. Potom máš deň voľný od seba samého.",
+"Nikto to za teba neurobí. Vstaň a choď.",
+"Hlava bude klamať. Telo zvládne viac.",
+"Rozmýšľanie skončilo. Teraz sa koná.",
+"Toto nie je o výkone. Toto je o tom, kto tu rozhoduje.",
+"Zatvor appku. Urob to. Potom sa vráť."
+];
+var CALM = [
+"Deň je za tebou. Pozrime sa na neho v pokoji.",
+"Žiadne hodnotenie. Len pravda, krátko.",
+"Pokojne. Čo bolo, bolo. Čo z toho berieš ďalej?",
+"Večer je na priznanie, nie na bičovanie."
+];
+var NOPE = [
+"Dve minúty. To je celá dohoda. Potom môžeš skončiť.",
+"Nemáš sa rozhodnúť o celej výzve. Len o prvých dvoch minútach.",
+"Nepohodlie, ktoré si vyberieš sám, je slabšie ako to, čo príde bez ovolania.",
+"Nikto nemá chuť. Odolní ľudia to robia aj tak."
+];
+var NOPE_Q = [
+{q:"Nie veci nás rozhadzujú, ale naše názory na ne.",a:"Epiktétos"},
+{q:"Ťažké je to preto, že sa neodvážime.",a:"Seneca"},
+{q:"Máš moc nad svojou mysľou. V tom je tvoja sila.",a:"Marcus Aurelius"},
+{q:"Ako dlho ešte odkladáš to, čo od seba chceš?",a:"Epiktétos"}
+];
+
+/* ---------- 5. HODNOSTI ---------- */
+var RANKS=[
+{n:"Rekrút",min:0},
+{n:"Nosič štítu",min:7},
+{n:"Hoplita",min:21},
+{n:"Veterán",min:46},
+{n:"Spartiat",min:91},
+{n:"Strážca Termopýl",min:181}
+];
+function rankOf(n){var r=RANKS[0];for(var i=0;i<RANKS.length;i++){if(n>=RANKS[i].min)r=RANKS[i];}return r;}
+function nextRank(n){for(var i=0;i<RANKS.length;i++){if(RANKS[i].min>n)return RANKS[i];}return null;}
+
+var CATNAME={A:"Telo a chlad",B:"Disciplína a pôst",C:"Myseľ a zvyky"};
+var CATORDER=["A","B","C"];
+var TRAINING={sila:"Sila",lahky:"Ľahký beh",tvrdy:"Tvrdý / dlhý beh",volno:"Voľno"};
+var HARD={sila:true,tvrdy:true};
+var DAYNAME=["Nedeľa","Pondelok","Utorok","Streda","Štvrtok","Piatok","Sobota"];
+
+/* ---------- 6. ULOŽENIE DÁT ---------- */
+var KEY="agoge_v1";
+var storeOk=true;
+var S=null;
+
+function freshState(){
+  return {
+    v:1,
+    mode:"nemecko",
+    schedule:{0:"volno",1:"sila",2:"lahky",3:"sila",4:"lahky",5:"sila",6:"tvrdy"},
+    levels:{A:1,B:1,C:1},
+    catStreak:{A:0,B:0,C:0},
+    days:{},
+    weeks:{},
+    notified:{},
+    remind:{morning:"06:30",evening:"21:00",notif:false},
+    setupDone:false
+  };
+}
+function load(){
+  try{
+    var raw=localStorage.getItem(KEY);
+    S=raw?JSON.parse(raw):freshState();
+  }catch(e){
+    storeOk=false;S=freshState();
+    var el=document.getElementById("storeErr");
+    el.hidden=false;
+    el.textContent="Tento prehliadač neukladá dáta (súkromné okno alebo zakázané úložisko). Appka funguje, ale po zatvorení sa dáta stratia. Použi Export zálohy.";
+  }
+  S=Object.assign(freshState(),S||{});
+  S.levels=Object.assign({A:1,B:1,C:1},S.levels);
+  S.catStreak=Object.assign({A:0,B:0,C:0},S.catStreak);
+  S.days=S.days||{};S.weeks=S.weeks||{};S.notified=S.notified||{};
+  S.remind=Object.assign({morning:"06:30",evening:"21:00",notif:false},S.remind);
+}
+function save(){
+  if(!storeOk)return;
+  try{localStorage.setItem(KEY,JSON.stringify(S));}
+  catch(e){
+    storeOk=false;
+    var el=document.getElementById("storeErr");
+    el.hidden=false;
+    el.textContent="Dáta sa nepodarilo uložiť. Urob si Export zálohy v sekcii Prečo → Nastavenia.";
+  }
+}
+
+/* ---------- 7. DÁTUMY ---------- */
+function key(d){
+  var y=d.getFullYear(),m=d.getMonth()+1,dd=d.getDate();
+  return y+"-"+(m<10?"0":"")+m+"-"+(dd<10?"0":"")+dd;
+}
+function today(){return key(new Date());}
+function shiftKey(k,n){var p=k.split("-");var d=new Date(+p[0],+p[1]-1,+p[2]);d.setDate(d.getDate()+n);return key(d);}
+function weekKey(d){
+  var t=new Date(d.getFullYear(),d.getMonth(),d.getDate());
+  var day=(t.getDay()+6)%7;
+  t.setDate(t.getDate()-day);
+  return key(t);
+}
+function prettyDate(k){
+  var p=k.split("-");var d=new Date(+p[0],+p[1]-1,+p[2]);
+  return DAYNAME[d.getDay()]+" "+(+p[2])+". "+(+p[1])+". "+p[0];
+}
+function hash(s){var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return Math.abs(h);}
+function toMin(s){var p=String(s||"0:0").split(":");return (+p[0]||0)*60+(+p[1]||0);}
+function nowMin(){var d=new Date();return d.getHours()*60+d.getMinutes();}
+function fmtLeft(m){var h=Math.floor(m/60),x=m%60;return (h>0?h+" h ":"")+x+" min";}
+
+/* pripomienky v prehliadači – fungujú len kým je appka otvorená */
+function notifSupported(){try{return typeof Notification!=="undefined"&&typeof Notification.requestPermission==="function";}catch(e){return false;}}
+function askNotif(){
+  if(!notifSupported()){toast("Tento prehliadač pripomienky neponúka.");return;}
+  try{
+    var p=Notification.requestPermission(function(res){handleNotifPerm(res);});
+    if(p&&typeof p.then==="function")p.then(handleNotifPerm,function(){toast("Prehliadač pripomienky nepovolil.");});
+  }catch(e){toast("Tento prehliadač pripomienky neponúka.");}
+}
+function handleNotifPerm(res){
+  if(res==="granted"){S.remind.notif=true;save();render();toast("Pripomienky zapnuté – kým je appka otvorená.");}
+  else{S.remind.notif=false;save();render();toast("Prehliadač pripomienky nepovolil.");}
+}
+function fireNotif(title,body){
+  if(!S.remind.notif||!notifSupported())return;
+  try{if(Notification.permission==="granted")new Notification(title,{body:body});}catch(e){}
+}
+
+/* ---------- 8. VÝBER VÝZVY ---------- */
+function dayRec(k){return S.days[k]||null;}
+function allDayKeys(){return Object.keys(S.days).sort();}
+
+function recentIds(n){
+  var out=[],k=today();
+  for(var i=1;i<=n;i++){
+    var r=S.days[shiftKey(k,-i)];
+    if(r&&r.id)out.push(r.id);
+  }
+  return out;
+}
+function nextCat(){
+  var ks=allDayKeys();
+  for(var i=ks.length-1;i>=0;i--){
+    var r=S.days[ks[i]];
+    if(r&&r.cat){
+      var idx=CATORDER.indexOf(r.cat);
+      return CATORDER[(idx+1)%3];
+    }
+  }
+  return "A";
+}
+function placeOk(c){
+  if(c.p==="vsade")return true;
+  if(S.mode==="nemecko")return c.p==="ubytovna";
+  return true;
+}
+function safeOk(c,training){
+  if(!training)return true;
+  if(!HARD[training])return true;
+  return !c.f && !c.h;
+}
+function pick(cat,training,excl){
+  excl=excl||[];
+  var recent=recentIds(14);
+  var lvl=S.levels[cat];
+  function f(useRecent,exactLvl){
+    return CH.filter(function(c){
+      if(c.c!==cat)return false;
+      if(!placeOk(c))return false;
+      if(!safeOk(c,training))return false;
+      if(excl.indexOf(c.id)>=0)return false;
+      if(useRecent&&recent.indexOf(c.id)>=0)return false;
+      if(exactLvl)return c.l===lvl;
+      return c.l<=lvl;
+    });
+  }
+  var pool=f(true,true);
+  if(!pool.length)pool=f(true,false);
+  if(!pool.length)pool=f(false,false);
+  if(!pool.length)pool=CH.filter(function(c){return c.c===cat&&safeOk(c,training)&&excl.indexOf(c.id)<0;});
+  if(!pool.length)pool=CH.filter(function(c){return c.c===cat;});
+  var h=hash(today()+cat+excl.length);
+  return pool[h%pool.length];
+}
+function chById(id){
+  for(var i=0;i<CH.length;i++)if(CH[i].id===id)return CH[i];
+  for(var j=0;j<WEEKLY.length;j++)if(WEEKLY[j].id===id)return WEEKLY[j];
+  return null;
+}
+function quoteOfDay(){return QUOTES[hash(today()+"q")%QUOTES.length];}
+function barkOfDay(){return BARKS[hash(today()+"b")%BARKS.length];}
+
+/* ---------- 9. POČTY ---------- */
+function totalDone(){
+  var n=0;for(var k in S.days){if(S.days[k].status==="done")n++;}
+  if(S.weeks)for(var w in S.weeks){if(S.weeks[w].status==="done")n++;}
+  return n;
+}
+function dayDone(){var n=0;for(var k in S.days){if(S.days[k].status==="done")n++;}return n;}
+function doneByCat(){
+  var o={A:0,B:0,C:0};
+  for(var k in S.days){var r=S.days[k];if(r.status==="done"&&o[r.cat]!==undefined)o[r.cat]++;}
+  return o;
+}
+function currentStreak(){
+  var k=today(),n=0;
+  if(!S.days[k]||S.days[k].status!=="done")k=shiftKey(k,-1);
+  while(S.days[k]&&S.days[k].status==="done"){n++;k=shiftKey(k,-1);}
+  return n;
+}
+function longestStreak(){
+  var ks=allDayKeys().filter(function(k){return S.days[k].status==="done";});
+  if(!ks.length)return 0;
+  var best=1,run=1;
+  for(var i=1;i<ks.length;i++){
+    if(shiftKey(ks[i-1],1)===ks[i])run++;else run=1;
+    if(run>best)best=run;
+  }
+  return best;
+}
+function yesterdayFailed(){
+  var r=S.days[shiftKey(today(),-1)];
+  return !!(r&&r.status==="fail");
+}
+
+/* ---------- 10. AKCIE ---------- */
+function setTraining(t){
+  var k=today();
+  var r=S.days[k]||{};
+  r.training=t;
+  if(!r.id){
+    var cat=nextCat();
+    var c=pick(cat,t,[]);
+    r.cat=cat;r.id=c.id;r.swaps=0;
+  }else{
+    var cur=chById(r.id);
+    if(cur&&!safeOk(cur,t)){
+      var c2=pick(r.cat,t,[cur.id]);
+      r.id=c2.id;
+      toast("Dnes máš "+TRAINING[t].toLowerCase()+". Výzvu som kvôli bezpečnosti vymenil.");
+    }
+  }
+  S.days[k]=r;save();render();
+}
+function swap(){
+  var k=today(),r=S.days[k];
+  if(!r||r.swaps>=1)return;
+  var c=pick(r.cat,r.training,[r.id]);
+  r.id=c.id;r.swaps=1;S.days[k]=r;save();render();
+  toast("Výmena použitá. Dnes už len táto.");
+}
+function finish(status){
+  var k=today(),r=S.days[k];
+  if(!r)return;
+  var beforeRank=rankOf(totalDone()).n;
+  r.status=status;
+  var leveled=false;
+  if(status==="done"){
+    S.catStreak[r.cat]=(S.catStreak[r.cat]||0)+1;
+    if(S.catStreak[r.cat]>=5&&S.levels[r.cat]<3){
+      S.levels[r.cat]++;S.catStreak[r.cat]=0;leveled=true;
+    }
+  }else{
+    S.catStreak[r.cat]=0;
+  }
+  S.days[k]=r;save();
+  var afterRank=rankOf(totalDone()).n;
+  if(status==="done")showWin(beforeRank!==afterRank?afterRank:null,leveled?r.cat:null);
+  else showFail();
+  render();
+}
+function finishWeekly(status){
+  var w=weekKey(new Date());
+  var rec=S.weeks[w]||{};
+  var beforeRank=rankOf(totalDone()).n;
+  rec.status=status;S.weeks[w]=rec;save();
+  var afterRank=rankOf(totalDone()).n;
+  if(status==="done")showWin(beforeRank!==afterRank?afterRank:null,null,true);
+  render();
+}
+function saveReflection(){
+  var k=today(),r=S.days[k]||{};
+  r.ref={
+    q1:document.getElementById("r1").value.trim(),
+    q2:document.getElementById("r2").value.trim(),
+    q3:document.getElementById("r3").value.trim()
+  };
+  S.days[k]=r;save();render();
+  toast("Zapísané do denníka.");
+}
+
+/* ---------- 11. PREKRYTIA ---------- */
+var ovl=document.getElementById("ovl");
+function closeOvl(){ovl.innerHTML="";}
+function shieldSvg(){
+  return '<svg class="shield pop" viewBox="0 0 110 128" aria-hidden="true">'+
+  '<path d="M55 4 8 20v42c0 29 23 50 47 62 24-12 47-33 47-62V20L55 4z" fill="#1D1F24" stroke="#C08E45" stroke-width="3"/>'+
+  '<path d="M55 20v76" stroke="#8A6630" stroke-width="2.5"/>'+
+  '<path d="M24 38h62M28 56h54M33 74h44" stroke="#8A6630" stroke-width="2.5"/>'+
+  '<path d="M34 62l14 15 28-32" fill="none" stroke="#C08E45" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>'+
+  '</svg>';
+}
+function showWin(newRank,leveledCat,weekly){
+  var lines=["Splnené. Zapísané.","O jeden deň tvrdší ako včera.","Dobre. Zajtra znova."];
+  var head=weekly?"AGOGÉ VÝZVA SPLNENÁ":"SPLNENÉ";
+  var html='<div class="ovl"><div class="ovl-in">'+shieldSvg()+
+    '<h2 class="fade" style="font-size:28px;color:var(--bronze);margin-top:16px">'+head+'</h2>'+
+    '<p class="fade" style="color:var(--ash);margin-top:8px">'+lines[hash(today())%lines.length]+'</p>';
+  if(newRank)html+='<div class="fade" style="margin-top:20px;border:1px solid var(--bronze);border-radius:5px;padding:14px"><div class="eyebrow">Nová hodnosť</div><div class="disp" style="font-size:26px;color:var(--bone)">'+esc(newRank)+'</div></div>';
+  if(leveledCat)html+='<div class="fade" style="margin-top:14px;border:1px solid var(--line);border-radius:5px;padding:14px"><div class="eyebrow">Úroveň zvýšená</div><div class="disp" style="font-size:19px;color:var(--bone)">'+esc(CATNAME[leveledCat])+' → úroveň '+S.levels[leveledCat]+'</div><p class="hint">Päť splnených za sebou v tejto oblasti. Odteraz budú výzvy tvrdšie.</p></div>';
+  html+='<button class="btn prim" type="button" id="ovlClose" style="margin-top:22px">Zatvoriť</button></div></div>';
+  ovl.innerHTML=html;
+  document.getElementById("ovlClose").onclick=closeOvl;
+}
+function showFail(){
+  ovl.innerHTML='<div class="ovl"><div class="ovl-in">'+
+  '<h2 style="font-size:24px;color:var(--bone)">Dnes nie.</h2>'+
+  '<p style="color:var(--ash);margin-top:12px">Žiadne výčitky. Jeden vynechaný deň nič neznamená.</p>'+
+  '<div style="margin-top:18px;border:1px solid var(--blood);border-radius:5px;padding:14px;text-align:left">'+
+  '<div class="eyebrow" style="color:var(--blood-bright)">Jediné pravidlo</div>'+
+  '<p style="color:var(--bone)">Nikdy nevynechaj dvakrát po sebe. Zajtra ti to pripomeniem.</p></div>'+
+  '<button class="btn prim" type="button" id="ovlClose" style="margin-top:22px">Rozumiem</button></div></div>';
+  document.getElementById("ovlClose").onclick=closeOvl;
+}
+var cdTimer=null;
+function showNope(){
+  var n=NOPE[hash(today()+"n")%NOPE.length];
+  var q=NOPE_Q[hash(today()+"nq")%NOPE_Q.length];
+  ovl.innerHTML='<div class="ovl"><div class="ovl-in">'+
+  '<div class="eyebrow">Pravidlo dvoch minút</div>'+
+  '<h2 style="font-size:24px;color:var(--bone);margin-bottom:12px">Začni len na dve minúty.</h2>'+
+  '<p style="color:#D8D4CC">'+esc(n)+'</p>'+
+  '<p style="color:var(--ash);margin-top:10px">Po dvoch minútach máš právo skončiť. Väčšinou neskončíš.</p>'+
+  '<div style="margin:20px 0;border-left:3px solid var(--bronze-dim);padding-left:14px;text-align:left">'+
+  '<div class="quote" style="font-size:18px">„'+esc(q.q)+'“</div><div class="quote-src">'+esc(q.a)+'</div></div>'+
+  '<div class="count" id="cd">10</div>'+
+  '<p class="hint" id="cdTxt">Nadýchni sa. Odpočítavam.</p>'+
+  '<button class="btn prim" type="button" id="cdGo" style="margin-top:18px" disabled>Čakaj…</button>'+
+  '<button class="btn ghost" type="button" id="ovlClose">Zavrieť</button>'+
+  '</div></div>';
+  document.getElementById("ovlClose").onclick=function(){if(cdTimer)clearInterval(cdTimer);closeOvl();};
+  var n2=10,cd=document.getElementById("cd"),txt=document.getElementById("cdTxt"),go=document.getElementById("cdGo");
+  if(cdTimer)clearInterval(cdTimer);
+  cdTimer=setInterval(function(){
+    n2--;
+    if(n2>0){cd.textContent=n2;}
+    else{
+      clearInterval(cdTimer);cdTimer=null;
+      cd.textContent="TERAZ";cd.style.fontSize="52px";
+      txt.textContent="Dve minúty. Choď.";
+      go.disabled=false;go.textContent="Idem na dve minúty";
+      go.onclick=function(){closeOvl();toast("Dve minúty. Potom sa rozhodni znova.");};
+    }
+  },1000);
+}
+function toast(m){
+  var t=document.getElementById("toast");
+  t.innerHTML='<div class="toast">'+esc(m)+'</div>';
+  setTimeout(function(){t.innerHTML="";},3200);
+}
+function esc(s){
+  return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+
+/* ---------- 12. VYKRESLENIE: DNES ---------- */
+function placeLabel(p){
+  if(p==="vsade")return"Všade";
+  if(p==="ubytovna")return"Ubytovňa aj doma";
+  return"Doma";
+}
+function remindCard(r){
+  var mM=toMin(S.remind.morning),eM=toMin(S.remind.evening),n=nowMin();
+  if(!r||!r.training){
+    if(n>=mM)return '<div class="card order" style="padding:14px 16px;margin-bottom:14px"><div class="eyebrow">Pripomienka · '+esc(S.remind.morning)+'</div><div class="bark">Rozkaz dňa čaká. Potvrď tréning a vezmi si ho.</div></div>';
+    return '<div class="card" style="padding:14px 16px;margin-bottom:14px"><div class="eyebrow">Ranný rozkaz o '+esc(S.remind.morning)+'</div><p class="hint" style="margin:0">Zostáva '+fmtLeft(mM-n)+'. Začať môžeš aj skôr.</p></div>';
+  }
+  if(!r.status){
+    if(n>=eM)return '<div class="card warn" style="padding:14px 16px;margin-bottom:14px"><div class="eyebrow" style="color:var(--blood-bright)">Pripomienka · '+esc(S.remind.evening)+'</div><div class="bark">Deň sa končí a výzva nie je uzavretá. Ešte je čas.</div></div>';
+    return '<div class="card" style="padding:14px 16px;margin-bottom:14px"><div class="eyebrow">Do večernej uzávierky</div><p class="hint" style="margin:0">Zostáva '+fmtLeft(eM-n)+' do '+esc(S.remind.evening)+'.</p></div>';
+  }
+  return "";
+}
+function renderDnes(){
+  var k=today(),r=S.days[k],h=new Date().getHours();
+  var out="";
+
+  if(!S.setupDone){
+    out+='<div class="card order"><div class="eyebrow">Prvé nastavenie</div>'+
+    '<h2 style="font-size:22px">Vitaj v AGOGÉ.</h2>'+
+    '<p style="margin-top:10px;color:#D8D4CC">Každý deň dostaneš jednu výzvu na 15–20 minút. Nie je to tréning – je to tréning hlavy. Všetky tri oblasti začínaš na úrovni 1 a appka ťa posúva sama.</p>'+
+    '<p style="margin-top:10px;color:#D8D4CC">Najprv dve veci: kde teraz si a aký máš týždenný rozpis tréningu. Rozpis potrebujem preto, aby som ti nedal pôst v deň silového alebo dlhého tréningu.</p>'+
+    '<button class="btn prim" type="button" data-act="setup">Nastaviť rozpis</button>'+
+    '<button class="btn ghost" type="button" data-act="setupSkip">Preskočiť, nastavím neskôr</button></div>';
+    return out;
+  }
+
+  out+='<div id="remindSlot">'+remindCard(r)+'</div>';
+
+  /* pripomienka po vynechaní */
+  if(yesterdayFailed()&&(!r||!r.status)){
+    out+='<div class="card warn"><div class="eyebrow" style="color:var(--blood-bright)">Pozor</div>'+
+    '<div class="bark">Včera si vynechal. Pravidlo je jasné: nikdy nie dvakrát po sebe.</div>'+
+    '<p class="hint">Dnes to nemusí byť dokonalé. Musí to byť urobené.</p></div>';
+  }
+
+  /* 1. tréning dňa */
+  if(!r||!r.training){
+    var planned=S.schedule[String(new Date().getDay())]||"volno";
+    out+='<div class="card order"><div class="eyebrow">Ráno · krok 1</div>'+
+    '<div class="bark">Aký máš dnes tréning?</div>'+
+    '<p class="hint">Podľa rozpisu: '+esc(DAYNAME[new Date().getDay()])+' – <b style="color:var(--bronze)">'+esc(TRAINING[planned])+'</b></p>'+
+    '<button class="btn prim" type="button" data-act="train" data-t="'+planned+'">Potvrdiť: '+esc(TRAINING[planned])+'</button>'+
+    '<div class="hint" style="margin-top:14px">Alebo zmeň:</div><div class="row2" style="margin-top:8px">';
+    for(var t in TRAINING){
+      if(t===planned)continue;
+      out+='<button class="btn sm" type="button" data-act="train" data-t="'+t+'">'+esc(TRAINING[t])+'</button>';
+    }
+    out+='</div></div>';
+    out+=quoteCard();
+    return out;
+  }
+
+  /* 2. rozkaz dňa */
+  var c=chById(r.id);
+  if(!c){delete S.days[k];save();return renderDnes();}
+
+  out+='<div class="card order">';
+  out+='<div class="eyebrow">Rozkaz dňa · '+esc(CATNAME[c.cat||c.c])+' · úroveň '+c.l+'</div>';
+  if(!r.status)out+='<div class="bark" style="margin-bottom:6px">'+esc(barkOfDay())+'</div>';
+  out+='<div class="ch-name">'+esc(c.t)+'</div>';
+  out+='<div class="meta"><span class="tag b">'+esc(c.dur)+'</span><span class="tag">'+esc(placeLabel(c.p))+'</span><span class="tag">Dnes: '+esc(TRAINING[r.training])+'</span></div>';
+  out+='<p class="ch-desc">'+esc(c.d)+'</p>';
+  out+='<div class="why">'+esc(c.w)+'</div>';
+  if(c.s)out+='<div class="safety"><b>Bezpečnosť:</b> '+esc(c.s)+'</div>';
+
+  if(!r.status){
+    out+='<button class="btn prim" type="button" data-act="done">Splnené</button>';
+    out+='<button class="btn" type="button" data-act="nope">Nechce sa mi</button>';
+    out+='<div class="row2" style="margin-top:10px">'+
+      '<button class="btn sm" type="button" data-act="swap"'+(r.swaps>=1?" disabled":"")+'>'+(r.swaps>=1?"Výmena použitá":"Vymeniť")+'</button>'+
+      '<button class="btn sm red" type="button" data-act="fail">Nesplnené</button></div>';
+    if(r.swaps>=1)out+='<p class="hint">Vymeniť sa dá raz za deň. Dnes už bolo.</p>';
+  }else{
+    out+='<div style="margin-top:14px"><span class="badge '+(r.status==="done"?"d":"f")+'">'+(r.status==="done"?"Splnené":"Nesplnené")+'</span></div>';
+  }
+  out+='</div>';
+
+  /* 3. týždenná AGOGÉ výzva */
+  out+=weeklyCard();
+
+  /* 4. myšlienka dňa */
+  out+=quoteCard();
+
+  /* 5. večerná reflexia */
+  out+=reflectionCard(r,h);
+
+  return out;
+}
+function quoteCard(){
+  var q=quoteOfDay();
+  return '<div class="card"><div class="eyebrow">Myšlienka dňa</div>'+
+  '<div class="quote">„'+esc(q.q)+'“</div>'+
+  '<div class="quote-src">'+esc(q.a)+'</div>'+
+  '<div class="quote-mean">'+esc(q.m)+'</div></div>';
+}
+function weeklyCard(){
+  var d=new Date(),dow=d.getDay();
+  if(S.mode!=="doma")return"";
+  if(dow!==6&&dow!==0)return"";
+  var w=weekKey(d);
+  var rec=S.weeks[w]||{};
+  if(!rec.id){
+    var wi=hash(w)%WEEKLY.length;
+    rec.id=WEEKLY[wi].id;S.weeks[w]=rec;save();
+  }
+  var c=chById(rec.id);
+  if(!c)return"";
+  var out='<div class="card" style="border-color:var(--bronze-dim)"><div class="eyebrow">Týždenná AGOGÉ výzva</div>'+
+  '<div class="ch-name" style="font-size:22px">'+esc(c.t)+'</div>'+
+  '<div class="meta"><span class="tag b">'+esc(c.dur)+'</span><span class="tag">Víkend doma</span></div>'+
+  '<p class="ch-desc">'+esc(c.d)+'</p><div class="why">'+esc(c.w)+'</div>';
+  if(c.s)out+='<div class="safety"><b>Bezpečnosť:</b> '+esc(c.s)+'</div>';
+  if(c.f){
+    var r=S.days[today()];
+    if(r&&HARD[r.training])out+='<div class="safety"><b>Dnes nie:</b> máš '+esc(TRAINING[r.training]).toLowerCase()+'. Pôst si nechaj na deň voľna.</div>';
+  }
+  if(!rec.status){
+    out+='<div class="row2" style="margin-top:12px">'+
+    '<button class="btn sm prim" type="button" data-act="wdone">Splnená</button>'+
+    '<button class="btn sm ghost" type="button" data-act="wskip">Tento týždeň nie</button></div>';
+  }else{
+    out+='<div style="margin-top:14px"><span class="badge '+(rec.status==="done"?"d":"f")+'">'+(rec.status==="done"?"Splnená":"Preskočená")+'</span></div>';
+  }
+  return out+'</div>';
+}
+function reflectionCard(r,h){
+  var done=r.ref&&(r.ref.q1||r.ref.q2||r.ref.q3);
+  if(!r.status&&nowMin()<toMin(S.remind.evening)&&!done)return"";
+  var out='<div class="card"><div class="eyebrow">Večer · reflexia</div>';
+  if(done){
+    out+='<p style="color:var(--ash)">Dnešná reflexia je zapísaná.</p>'+
+    '<div class="entry" style="border:none;padding-top:10px"><div class="rf"><b>Najťažšie:</b> '+esc(r.ref.q1||"–")+'\n<b>Reakcia:</b> '+esc(r.ref.q2||"–")+'\n<b>Zajtra lepšie:</b> '+esc(r.ref.q3||"–")+'</div></div>'+
+    '<button class="btn ghost" type="button" data-act="editref">Upraviť</button></div>';
+    return out;
+  }
+  out+='<div style="color:#D8D4CC;margin-bottom:4px">'+esc(CALM[hash(today()+"c")%CALM.length])+'</div>'+
+  '<p class="hint">Tri otázky, dve minúty. Krátke vety stačia.</p>'+
+  '<label for="r1">Čo bolo dnes najťažšie?</label><textarea id="r1">'+esc(r.ref?r.ref.q1:"")+'</textarea>'+
+  '<label for="r2">Ako som zareagoval?</label><textarea id="r2">'+esc(r.ref?r.ref.q2:"")+'</textarea>'+
+  '<label for="r3">Čo urobím zajtra lepšie?</label><textarea id="r3">'+esc(r.ref?r.ref.q3:"")+'</textarea>'+
+  '<button class="btn prim" type="button" data-act="saveref">Zapísať do denníka</button></div>';
+  return out;
+}
+
+/* ---------- 13. DENNÍK ---------- */
+function renderDennik(){
+  var ks=allDayKeys().reverse();
+  var out='<div class="card"><div class="eyebrow">Denník</div>';
+  if(!ks.length){
+    out+='<p style="color:var(--ash)">Zatiaľ nič. Prvý zápis pridáš večer po prvej výzve.</p></div>';
+    return out;
+  }
+  out+='<p class="hint" style="margin:0 0 4px">'+ks.length+' dní v denníku.</p></div><div class="card">';
+  for(var i=0;i<ks.length&&i<120;i++){
+    var k=ks[i],r=S.days[k],c=chById(r.id);
+    out+='<div class="entry"><div class="dt">'+esc(prettyDate(k))+'</div>';
+    out+='<div class="ti">'+esc(c?c.t:"(neznáma výzva)")+'</div>';
+    out+='<div style="display:flex;gap:6px;flex-wrap:wrap">';
+    if(r.status)out+='<span class="badge '+(r.status==="done"?"d":"f")+'">'+(r.status==="done"?"Splnené":"Nesplnené")+'</span>';
+    else out+='<span class="tag">Bez výsledku</span>';
+    if(r.cat)out+='<span class="tag">'+esc(CATNAME[r.cat])+'</span>';
+    if(r.training)out+='<span class="tag">'+esc(TRAINING[r.training])+'</span>';
+    out+='</div>';
+    if(r.ref&&(r.ref.q1||r.ref.q2||r.ref.q3)){
+      out+='<div class="rf"><b>Najťažšie:</b> '+esc(r.ref.q1||"–")+'\n<b>Reakcia:</b> '+esc(r.ref.q2||"–")+'\n<b>Zajtra lepšie:</b> '+esc(r.ref.q3||"–")+'</div>';
+    }
+    out+='</div>';
+  }
+  return out+'</div>';
+}
+
+/* ---------- 14. ŠTATISTIKY ---------- */
+function renderStat(){
+  var tot=totalDone(),cur=currentStreak(),best=longestStreak(),by=doneByCat();
+  var r=rankOf(tot),nx=nextRank(tot);
+  var out='<div class="card"><div class="eyebrow">Hodnosť</div>'+
+  '<div class="disp" style="font-size:30px;color:var(--bronze)">'+esc(r.n)+'</div>'+
+  '<p class="hint">'+tot+' splnených výziev spolu.</p>';
+  if(nx){
+    var need=nx.min-tot;
+    var span=nx.min-r.min,prog=Math.max(0,Math.min(100,Math.round((tot-r.min)/span*100)));
+    out+='<div class="bar" style="margin-top:12px"><i style="width:'+prog+'%"></i></div>'+
+    '<p class="hint">Ešte '+need+' do hodnosti '+esc(nx.n)+'.</p>';
+  }else{
+    out+='<p class="hint">Najvyššia hodnosť. Teraz to už len drž.</p>';
+  }
+  out+='</div>';
+
+  out+='<div class="card"><div class="eyebrow">Série</div>'+
+  '<div style="display:flex;gap:10px">'+
+  '<div style="flex:1"><div class="k" style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash)">Teraz</div><div class="disp" style="font-size:30px;color:var(--bone);font-variant-numeric:tabular-nums">'+cur+'</div></div>'+
+  '<div style="flex:1"><div class="k" style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash)">Najdlhšia</div><div class="disp" style="font-size:30px;color:var(--bone);font-variant-numeric:tabular-nums">'+best+'</div></div>'+
+  '</div><p class="hint">Séria je počet dní splnených za sebou.</p></div>';
+
+  out+='<div class="card"><div class="eyebrow">Oblasti a úrovne</div>';
+  var mx=Math.max(1,by.A,by.B,by.C);
+  CATORDER.forEach(function(cc){
+    out+='<div class="catrow"><div class="nmm">'+esc(CATNAME[cc])+'</div>'+
+    '<div class="bar"><i style="width:'+Math.round(by[cc]/mx*100)+'%"></i></div>'+
+    '<div class="nn">'+by[cc]+'</div></div>'+
+    '<p class="hint" style="margin:4px 0 0 0">Úroveň '+S.levels[cc]+' · '+(S.catStreak[cc]||0)+'/5 do ďalšej úrovne</p>';
+  });
+  out+='<p class="hint" style="margin-top:14px">Úroveň sa zvýši, keď máš v oblasti päť splnených výziev za sebou. Jedna nesplnená počítadlo vynuluje.</p></div>';
+
+  /* kalendár */
+  var weeks=18,cells=[],t=new Date();
+  var startDow=(t.getDay()+6)%7;
+  var end=new Date(t.getFullYear(),t.getMonth(),t.getDate()+(6-startDow));
+  var start=new Date(end.getFullYear(),end.getMonth(),end.getDate()-(weeks*7-1));
+  var tk=today();
+  for(var i=0;i<weeks*7;i++){
+    var d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i);
+    var kk=key(d),rec=S.days[kk];
+    var cls=rec&&rec.status==="done"?"d":(rec&&rec.status==="fail"?"f":"");
+    if(kk===tk)cls+=" t";
+    cells.push('<i class="'+cls.trim()+'" title="'+kk+'"></i>');
+  }
+  out+='<div class="card"><div class="eyebrow">Posledných '+weeks+' týždňov</div>'+
+  '<div class="gridwrap"><div class="cal">'+cells.join("")+'</div></div>'+
+  '<div class="legend"><span><b style="background:var(--bronze)"></b>Splnené</span>'+
+  '<span><b style="background:var(--blood)"></b>Nesplnené</span>'+
+  '<span><b style="background:#1A1C21"></b>Nič</span>'+
+  '<span><b style="background:transparent;box-shadow:0 0 0 2px var(--bone)"></b>Dnes</span></div></div>';
+  return out;
+}
+
+/* ---------- 15. PREČO TO FUNGUJE + NASTAVENIA ---------- */
+function renderInfo(){
+  var out='<div class="card prose"><div class="eyebrow">Prečo to funguje</div>'+
+  '<h2 style="font-size:22px;margin-bottom:10px">Tri veci, nič viac</h2>'+
+
+  '<h3>1. Diskomfort, ktorý si vyberieš sám</h3>'+
+  '<p>Stoici (Seneca, Epiktétos, Marcus Aurelius) to robili zámerne: raz za čas spali na zemi, jedli chudobne, chodili v starých šatách. Nie preto, že by boli blázni. Preto, že kto si nepohodlie vyberie sám, prestane sa ho báť. A keď potom príde nepohodlie, ktoré si nevybral – choroba, zlý deň v práci, problém na stavbe – už vie, že sa to dá prežiť.</p>'+
+  '<p>Preto si v tejto appke každý deň niečo vyberieš. Nie preto, že musíš. Preto, že môžeš.</p>'+
+
+  '<h3>2. Malé dávky stresu, ktoré rastú</h3>'+
+  '<p>Telo aj hlava sa posilňujú tým istým spôsobom ako pri tréningu: malá dávka záťaže, potom odpočinok, potom o kúsok viac. Keď začneš extrémom, zlomíš sa a skončíš. Keď začneš tridsiatimi sekundami studenej vody a každý týždeň pridáš, za pol roka stojíš v studenej sprche tri minúty a nerozumieš, prečo to kedysi bolo ťažké.</p>'+
+  '<p>Preto sú tu tri úrovne. Postúpiš, až keď máš v danej oblasti päť splnených výziev za sebou. Appka ťa neposúva rýchlejšie, ako zvládaš.</p>'+
+
+  '<h3>3. Konať, nie čítať</h3>'+
+  '<p>Čítanie o odolnosti nerobí nikoho odolným. Preto je tu krátky text, jedna výzva a dve tlačidlá. Ráno rozkaz, cez deň činnosť, večer tri vety. Nič viac. Keď si prečítal rozkaz dňa, odlož mobil a choď to urobiť.</p>'+
+
+  '<h3>Prečo 15–20 minút</h3>'+
+  '<p>Trénuješ šesťkrát do týždňa na Spartan Super a polmaratón. Tieto výzvy nie sú tréning a nemajú ti ho nahradiť ani pokaziť. Sú navyše a krátke. Keď sa niektorá výzva bije s tvojím dnešným tréningom, appka ju vymení sama – preto sa ťa ráno pýta, čo máš dnes v pláne.</p>'+
+  '</div>';
+
+  out+='<div class="card prose" style="border-color:var(--blood)"><div class="eyebrow" style="color:var(--blood-bright)">Bezpečnosť – prečítaj raz a pamätaj</div>'+
+  '<h3 style="color:var(--blood-bright)">Diskomfort áno, utrpenie nie</h3>'+
+  '<p>Je rozdiel medzi „toto je nepríjemné“ a „toto bolí“. Nepríjemné je cieľ. Bolesť je stopka. Keď niečo ostro bolí, pichá, strieľa alebo ťa to oberá o cit v ruke – <b>prestaň okamžite</b>. Odolnosť sa nebuduje zraneniami.</p>'+
+  '<h3 style="color:var(--blood-bright)">Chlad</h3>'+
+  '<ul><li>Začínaj 15–30 sekundami studenej vody na konci teplej sprchy a pridávaj po týždňoch, nie po dňoch.</li>'+
+  '<li><b>Nikdy nezadržuj dych pod vodou.</b> Dýchaj pomaly nosom.</li>'+
+  '<li><b>Nikdy sa neotužuj sám v otvorenej vode</b> – žiadna rieka, jazero, bazén, nádrž. Studená sprcha doma alebo na ubytovni, nič iné.</li>'+
+  '<li>Keď ti tuhnú ruky, modrejú prsty alebo sa nekontrolovane trasieš, skonči a zohrej sa.</li></ul>'+
+  '<h3 style="color:var(--blood-bright)">Pôst</h3>'+
+  '<ul><li>Žiadny pôst v deň silového tréningu, intervalov ani dlhého behu. Appka to rieši sama podľa tvojej rannej odpovede.</li>'+
+  '<li>Pi vodu. Čierna káva a čaj bez cukru sú v poriadku.</li>'+
+  '<li>Krúti sa ti hlava, vynecháva výkon v práci alebo si rozhodený? Najedz sa. To nie je zlyhanie, to je rozum.</li>'+
+  '<li>Fyzická práca elektrikára v Nemecku je záťaž. Dlhý pôst si nechaj na deň voľna.</li></ul>'+
+  '<h3 style="color:var(--blood-bright)">Spánok</h3>'+
+  '<p>Keď si spal pod šesť hodín, vynechaj ranné budíkové výzvy a dnes si poď skôr ľahnúť. Spánok nie je slabosť, je to základ, na ktorom stojí všetko ostatné.</p>'+
+  '<p class="hint">Appka nie je lekár. Pri zdravotnom probléme, chorobe alebo liekoch sa poraď s lekárom – hlavne pri chlade a pôste.</p>'+
+  '</div>';
+
+  /* nastavenia */
+  out+='<div class="card"><div class="eyebrow">Nastavenia</div>';
+  out+='<label>Režim</label><div class="row2">'+
+  '<button class="btn sm '+(S.mode==="nemecko"?"prim":"")+'" type="button" data-act="mode" data-m="nemecko">Nemecko</button>'+
+  '<button class="btn sm '+(S.mode==="doma"?"prim":"")+'" type="button" data-act="mode" data-m="doma">Doma</button></div>'+
+  '<p class="hint">V režime Nemecko dostaneš len výzvy, ktoré sa dajú na ubytovni a pri pracovnom dni. Týždenná AGOGÉ výzva sa zobrazuje len v režime Doma, cez víkend.</p>';
+
+  out+='<label>Týždenný rozpis tréningu</label>';
+  for(var i=1;i<=7;i++){
+    var dw=i%7;
+    out+='<div class="sch"><span>'+esc(DAYNAME[dw].slice(0,3))+'</span><select data-day="'+dw+'" aria-label="'+esc(DAYNAME[dw])+'">';
+    for(var t in TRAINING){
+      out+='<option value="'+t+'"'+(S.schedule[String(dw)]===t?" selected":"")+'>'+esc(TRAINING[t])+'</option>';
+    }
+    out+='</select></div>';
+  }
+  out+='<p class="hint">Rozpis je len návrh pre ranné potvrdenie. Každé ráno ho môžeš zmeniť jedným klikom.</p>';
+
+  out+='<label>Úrovne</label><div class="hint">';
+  CATORDER.forEach(function(cc){out+=esc(CATNAME[cc])+": úroveň "+S.levels[cc]+" ("+(S.catStreak[cc]||0)+"/5)<br>";});
+  out+='</div>';
+
+  out+='<label>Pripomienky</label>'+
+  '<div class="sch"><span>Ráno</span><input type="time" data-rem="morning" value="'+esc(S.remind.morning)+'" aria-label="Čas ranného rozkazu"></div>'+
+  '<div class="sch"><span>Večer</span><input type="time" data-rem="evening" value="'+esc(S.remind.evening)+'" aria-label="Čas večernej uzávierky"></div>'+
+  '<p class="hint">Podľa týchto časov sa mení horná lišta na obrazovke Dnes: ráno ťa vyzve na rozkaz, večer ti pripomenie neuzavretú výzvu a otvorí reflexiu.</p>'+
+  '<button class="btn sm '+(S.remind.notif?"prim":"")+'" type="button" data-act="notif">'+(S.remind.notif?"Pripomienky v prehliadači sú zapnuté":"Zapnúť pripomienky v prehliadači")+'</button>'+
+  '<div class="safety" style="margin-top:10px"><b>Povedzme si to rovno:</b> appka ti nevie zazvoniť na telefón, keď je zavretá. Žiadna stránka to bez servera nedokáže. Pripomienky v prehliadači fungujú, len kým máš appku otvorenú na pozadí – na počítači áno, na telefóne väčšinou nie.<br><br>Spoľahlivé riešenie: nastav si v telefóne dva opakované budíky – jeden na '+esc(S.remind.morning)+' („Rozkaz dňa“) a jeden na '+esc(S.remind.evening)+' („Uzavri deň“). Appka urobí zvyšok.</div>'+
+  '<label>Záloha dát</label>'+
+  '<button class="btn sm" type="button" data-act="export">Export zálohy (JSON)</button>'+
+  '<button class="btn sm" type="button" data-act="import">Import zálohy</button>'+
+  '<p class="hint">Dáta sú len v tomto prehliadači. Keď vymažeš dáta prehliadača alebo zmeníš telefón, bez zálohy sú stratené. Exportuj si ich raz za mesiac.</p>'+
+  '<button class="btn sm ghost" type="button" data-act="reset" style="color:var(--blood-bright)">Vymazať všetko</button>'+
+  '</div>';
+  return out;
+}
+
+/* ---------- 16. EXPORT / IMPORT ---------- */
+function doExport(){
+  var txt=JSON.stringify(S,null,2);
+  ovl.innerHTML='<div class="ovl"><div class="ovl-in" style="text-align:left">'+
+  '<div class="eyebrow">Export zálohy</div>'+
+  '<p style="color:#D8D4CC;margin-bottom:10px">Skopíruj celý text a ulož si ho – do poznámok, do mailu sebe, kamkoľvek. Týmto textom sa dáta dajú obnoviť.</p>'+
+  '<textarea id="expTxt" readonly style="min-height:200px;font-size:12px">'+esc(txt)+'</textarea>'+
+  '<button class="btn prim" type="button" id="expCopy">Skopírovať</button>'+
+  '<button class="btn ghost" type="button" id="ovlClose">Zatvoriť</button></div></div>';
+  document.getElementById("ovlClose").onclick=closeOvl;
+  var ta=document.getElementById("expTxt");
+  document.getElementById("expCopy").onclick=function(){
+    var ok=false;
+    try{
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(function(){toast("Záloha skopírovaná.");},function(){ta.select();toast("Text je označený – skopíruj ho ručne.");});
+        ok=true;
+      }
+    }catch(e){}
+    if(!ok){ta.select();toast("Text je označený – skopíruj ho ručne.");}
+  };
+}
+function doImport(){
+  ovl.innerHTML='<div class="ovl"><div class="ovl-in" style="text-align:left">'+
+  '<div class="eyebrow">Import zálohy</div>'+
+  '<p style="color:#D8D4CC;margin-bottom:10px">Vlož text zálohy. Prepíše to všetky súčasné dáta v tomto prehliadači.</p>'+
+  '<textarea id="impTxt" style="min-height:200px;font-size:12px" placeholder="Sem vlož text zálohy"></textarea>'+
+  '<button class="btn prim" type="button" id="impGo">Obnoviť dáta</button>'+
+  '<button class="btn ghost" type="button" id="ovlClose">Zatvoriť</button></div></div>';
+  document.getElementById("ovlClose").onclick=closeOvl;
+  document.getElementById("impGo").onclick=function(){
+    var v=document.getElementById("impTxt").value.trim();
+    if(!v){toast("Prázdne pole.");return;}
+    try{
+      var o=JSON.parse(v);
+      if(!o||typeof o!=="object"||!o.days)throw new Error("zly format");
+      S=Object.assign(freshState(),o);
+      S.levels=Object.assign({A:1,B:1,C:1},S.levels);
+      S.catStreak=Object.assign({A:0,B:0,C:0},S.catStreak);
+      S.days=S.days||{};S.weeks=S.weeks||{};
+      save();closeOvl();render();toast("Dáta obnovené.");
+    }catch(e){toast("Toto nie je platná záloha AGOGÉ.");}
+  };
+}
+function doReset(){
+  ovl.innerHTML='<div class="ovl"><div class="ovl-in">'+
+  '<h2 style="font-size:22px;color:var(--bone)">Vymazať všetko?</h2>'+
+  '<p style="color:var(--ash);margin-top:10px">Zmizne denník, séria, hodnosť aj úrovne. Toto sa nedá vrátiť.</p>'+
+  '<button class="btn red" type="button" id="rsYes">Áno, vymazať</button>'+
+  '<button class="btn ghost" type="button" id="ovlClose">Nie, nechaj to</button></div></div>';
+  document.getElementById("ovlClose").onclick=closeOvl;
+  document.getElementById("rsYes").onclick=function(){
+    S=freshState();
+    try{localStorage.removeItem(KEY);}catch(e){}
+    save();closeOvl();go("Dnes");toast("Vymazané. Začínaš od Rekrúta.");
+  };
+}
+function doSetup(){
+  ovl.innerHTML='<div class="ovl"><div class="ovl-in" style="text-align:left">'+
+  '<div class="eyebrow">Krok 1 z 2 · Kde teraz si</div>'+
+  '<div class="row2" style="margin-bottom:6px">'+
+  '<button class="btn sm '+(S.mode==="nemecko"?"prim":"")+'" type="button" id="sM1">Nemecko</button>'+
+  '<button class="btn sm '+(S.mode==="doma"?"prim":"")+'" type="button" id="sM2">Doma</button></div>'+
+  '<p class="hint">Prepnúť sa to dá kedykoľvek hore vpravo.</p>'+
+  '<div class="eyebrow" style="margin-top:20px">Krok 2 z 2 · Týždenný rozpis</div>'+
+  '<p class="hint" style="margin:0 0 10px">Aby som ti nedal pôst v deň silového alebo dlhého tréningu.</p>'+
+  '<div id="sSch"></div>'+
+  '<button class="btn prim" type="button" id="sGo">Hotovo, daj mi prvý rozkaz</button></div></div>';
+  function paint(){
+    var h="";
+    for(var i=1;i<=7;i++){
+      var dw=i%7;
+      h+='<div class="sch"><span>'+esc(DAYNAME[dw].slice(0,3))+'</span><select data-day="'+dw+'" aria-label="'+esc(DAYNAME[dw])+'">';
+      for(var t in TRAINING)h+='<option value="'+t+'"'+(S.schedule[String(dw)]===t?" selected":"")+'>'+esc(TRAINING[t])+'</option>';
+      h+='</select></div>';
+    }
+    document.getElementById("sSch").innerHTML=h;
+  }
+  paint();
+  document.getElementById("sM1").onclick=function(){S.mode="nemecko";save();doSetup();};
+  document.getElementById("sM2").onclick=function(){S.mode="doma";save();doSetup();};
+  document.getElementById("sGo").onclick=function(){
+    var sels=ovl.querySelectorAll("select[data-day]");
+    for(var i=0;i<sels.length;i++)S.schedule[sels[i].getAttribute("data-day")]=sels[i].value;
+    S.setupDone=true;save();closeOvl();render();
+  };
+}
+
+/* ---------- 17. ROUTER + UDALOSTI ---------- */
+var VIEWS=["Dnes","Dennik","Stat","Info"];
+var view="Dnes";
+function go(v){
+  if(VIEWS.indexOf(v)<0)v="Dnes";
+  view=v;
+  try{if(location.hash.slice(1)!==v.toLowerCase())location.hash=v.toLowerCase();}catch(e){}
+  render();
+  window.scrollTo(0,0);
+}
+function render(){
+  var tot=totalDone();
+  document.getElementById("hRank").textContent=rankOf(tot).n;
+  document.getElementById("hStreak").textContent=currentStreak()+" dní";
+  document.getElementById("hTotal").textContent=String(tot);
+  var mb=document.getElementById("modeBtn");
+  mb.textContent=S.mode==="nemecko"?"Nemecko":"Doma";
+  mb.setAttribute("aria-label","Režim: "+mb.textContent+". Prepnúť.");
+
+  document.getElementById("vDnes").hidden=view!=="Dnes";
+  document.getElementById("vDennik").hidden=view!=="Dennik";
+  document.getElementById("vStat").hidden=view!=="Stat";
+  document.getElementById("vInfo").hidden=view!=="Info";
+
+  if(view==="Dnes")document.getElementById("vDnes").innerHTML=renderDnes();
+  if(view==="Dennik")document.getElementById("vDennik").innerHTML=renderDennik();
+  if(view==="Stat")document.getElementById("vStat").innerHTML=renderStat();
+  if(view==="Info")document.getElementById("vInfo").innerHTML=renderInfo();
+
+  var navs=document.querySelectorAll(".nav button");
+  for(var i=0;i<navs.length;i++){
+    if(navs[i].getAttribute("data-v")===view)navs[i].setAttribute("aria-current","page");
+    else navs[i].removeAttribute("aria-current");
+  }
+}
+
+document.querySelector(".nav").addEventListener("click",function(e){
+  var b=e.target.closest("button[data-v]");
+  if(b)go(b.getAttribute("data-v"));
+});
+document.getElementById("modeBtn").addEventListener("click",function(){
+  S.mode=S.mode==="nemecko"?"doma":"nemecko";
+  var k=today(),r=S.days[k];
+  if(r&&!r.status&&r.id){
+    var c=chById(r.id);
+    if(c&&!placeOk(c)){
+      var c2=pick(r.cat,r.training,[c.id]);
+      r.id=c2.id;S.days[k]=r;
+      toast("Režim prepnutý. Dostal si novú výzvu.");
+    }else toast("Režim: "+(S.mode==="nemecko"?"Nemecko":"Doma"));
+  }else toast("Režim: "+(S.mode==="nemecko"?"Nemecko":"Doma"));
+  save();render();
+});
+document.getElementById("app").addEventListener("click",function(e){
+  var b=e.target.closest("button[data-act]");
+  if(!b)return;
+  var a=b.getAttribute("data-act");
+  if(a==="train")setTraining(b.getAttribute("data-t"));
+  else if(a==="done")finish("done");
+  else if(a==="fail")finish("fail");
+  else if(a==="swap")swap();
+  else if(a==="nope")showNope();
+  else if(a==="saveref")saveReflection();
+  else if(a==="editref"){var k=today();if(S.days[k]){S.days[k].ref=null;save();render();}}
+  else if(a==="wdone")finishWeekly("done");
+  else if(a==="wskip")finishWeekly("skip");
+  else if(a==="mode"){S.mode=b.getAttribute("data-m");save();render();}
+  else if(a==="export")doExport();
+  else if(a==="import")doImport();
+  else if(a==="reset")doReset();
+  else if(a==="setup")doSetup();
+  else if(a==="notif"){if(S.remind.notif){S.remind.notif=false;save();render();toast("Pripomienky v prehliadači vypnuté.");}else askNotif();}
+  else if(a==="setupSkip"){S.setupDone=true;save();render();}
+});
+document.getElementById("app").addEventListener("change",function(e){
+  var s=e.target.closest("select[data-day]");
+  if(s){S.schedule[s.getAttribute("data-day")]=s.value;save();toast("Rozpis uložený.");return;}
+  var t=e.target.closest("input[data-rem]");
+  if(t){
+    var v=t.value;
+    if(!/^\d{1,2}:\d{2}$/.test(v)){toast("Neplatný čas.");return;}
+    S.remind[t.getAttribute("data-rem")]=v;save();render();
+    toast("Čas uložený.");
+  }
+});
+window.addEventListener("hashchange",function(){
+  var h=(location.hash||"").slice(1);
+  var m={dnes:"Dnes",dennik:"Dennik",stat:"Stat",info:"Info"};
+  if(m[h]&&m[h]!==view){view=m[h];render();}
+});
+
+/* ---------- 18. MINÚTOVÝ TIK (lišta + pripomienky) ---------- */
+var curDay=null;
+function tick(){
+  var k=today();
+  if(curDay&&curDay!==k){curDay=k;render();return;}
+  curDay=k;
+
+  var r=S.days[k],n=nowMin();
+  var mM=toMin(S.remind.morning),eM=toMin(S.remind.evening);
+  var flags=S.notified[k]||{};
+  if(n>=mM&&!flags.m&&(!r||!r.training)){
+    flags.m=1;S.notified[k]=flags;save();
+    fireNotif("AGOGÉ – rozkaz dňa","Potvrď tréning a vezmi si dnešnú výzvu.");
+  }
+  if(n>=eM&&!flags.e&&(!r||!r.status)){
+    flags.e=1;S.notified[k]=flags;save();
+    fireNotif("AGOGÉ – uzavri deň","Výzva ešte nie je uzavretá. Ešte je čas.");
+  }
+  /* staré značky preč, nech dáta nerastú */
+  var keys=Object.keys(S.notified);
+  if(keys.length>40){keys.sort();for(var i=0;i<keys.length-30;i++)delete S.notified[keys[i]];save();}
+
+  if(view!=="Dnes")return;
+  if(document.getElementById("ovl").innerHTML)return;
+  var ae=document.activeElement;
+  if(ae&&(ae.tagName==="TEXTAREA"||ae.tagName==="INPUT"||ae.tagName==="SELECT"))return;
+  var slot=document.getElementById("remindSlot");
+  if(slot)slot.innerHTML=remindCard(r);
+}
+
+/* ---------- 19. ŠTART ---------- */
+load();
+(function(){
+  var h=(location.hash||"").slice(1);
+  var m={dnes:"Dnes",dennik:"Dennik",stat:"Stat",info:"Info"};
+  if(m[h])view=m[h];
+})();
+render();
+curDay=today();
+setInterval(tick,30000);
+document.addEventListener("visibilitychange",function(){if(!document.hidden)tick();});
+</script>
+
+<script>
+/* registrácia service workera – vďaka nemu appka funguje offline */
+if("serviceWorker" in navigator){
+  window.addEventListener("load",function(){
+    navigator.serviceWorker.register("./sw.js").catch(function(){});
+  });
+}
+</script>
+</body>
+</html>
