@@ -49,6 +49,15 @@ Kontroluje databázu výziev priamo z `index.html`: počty, úrovne, povinné po
 a či má každá pôstna výzva bezpečnostnú poznámku. Beží aj v GitHub Actions
 pred nasadením – keď niečo nesedí, nasadenie sa zastaví.
 
+## Kópia pre Claude artifact
+
+```
+node scripts/build-artifact.mjs
+```
+
+Vyrobí `../agoge.html` — tú istú appku bez hlavičky a service workera,
+v tvare, aký očakáva Claude artifact. Zdrojom pravdy zostáva `index.html`.
+
 ## Nasadenie
 
 GitHub Actions, workflow `.github/workflows/pages.yml`.
