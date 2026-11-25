@@ -133,7 +133,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 
 /* ---------- formuláre ---------- */
 label{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);margin:14px 0 6px;font-family:var(--font-d)}
-textarea,input[type=text],input[type=time],select{
+textarea,input[type=text],input[type=time],input[type=date],select{
   width:100%;background:var(--coal);border:1px solid var(--line);border-radius:4px;
   color:var(--bone);padding:12px;font-family:inherit;font-size:16px;min-height:52px;
 }
@@ -194,7 +194,7 @@ textarea{min-height:84px;resize:vertical}
 .center{text-align:center}
 
 /* ---------- prekrytia ---------- */
-.ovl{position:fixed;inset:0;z-index:50;background:rgba(6,6,7,.97);display:flex;align-items:center;justify-content:center;padding:24px;overflow-y:auto}
+.ovl{position:fixed;inset:0;z-index:50;background:#070708;display:flex;align-items:center;justify-content:center;padding:24px;overflow-y:auto}
 .ovl-in{
   width:100%;max-width:420px;text-align:center;
   padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
@@ -217,6 +217,43 @@ textarea{min-height:84px;resize:vertical}
 .sch{display:grid;grid-template-columns:52px 1fr;gap:8px;align-items:center;margin-bottom:8px}
 .sch span{font-family:var(--font-d);font-size:13px;text-transform:uppercase;color:var(--ash)}
 .sch select{min-height:48px;margin:0}
+
+/* ---------- hodnosť, cieľ, prísaha, dôkaz ---------- */
+.rankprog{display:flex;align-items:center;gap:11px;margin:0 0 14px;padding:10px 12px;background:var(--stone);border:1px solid var(--line);border-radius:4px}
+.rankprog .txt{flex:1;min-width:0}
+.rankprog .lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash)}
+.rankprog .bar{margin-top:6px}
+.goalstrip{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:14px;padding:11px 14px;background:#15100F;border:1px solid var(--bronze-dim);border-radius:4px}
+.goalstrip .g-n{font-family:var(--font-d);font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--bone)}
+.goalstrip .g-d{font-family:var(--font-d);font-size:23px;line-height:1;color:var(--bronze);font-variant-numeric:tabular-nums}
+.goalstrip .g-s{font-size:12px;color:var(--ash);flex-basis:100%}
+.oathbox{border-left:3px solid var(--bronze);padding:3px 0 3px 14px;margin:14px 0;text-align:left}
+.oathbox .o-l{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--bronze)}
+.oathbox .o-t{font-family:var(--font-d);font-size:19px;line-height:1.3;color:var(--bone);margin-top:5px}
+.ladder .rk{display:flex;align-items:center;gap:10px;padding:9px 8px;border-bottom:1px solid var(--line)}
+.ladder .rk:last-child{border-bottom:none}
+.ladder .rk .nm{flex:1;font-family:var(--font-d);font-size:16px;text-transform:uppercase;letter-spacing:.04em;color:#6E6A63}
+.ladder .rk .dd{font-size:12px;color:var(--ash);font-variant-numeric:tabular-nums}
+.ladder .rk.past .nm{color:var(--ash)}
+.ladder .rk.on{background:#17130D;border-radius:3px}
+.ladder .rk.on .nm{color:var(--bronze)}
+.proof .pr{border:1px solid var(--line);border-radius:4px;padding:12px;margin-top:10px}
+.proof .pr .lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--bronze)}
+.proof .pr .tn{display:flex;align-items:center;gap:10px;margin-top:8px}
+.proof .pr .th{flex:1;min-width:0;color:#6E6A63;font-size:14px}
+.proof .pr .ar{color:var(--bronze);font-size:18px;flex:0 0 auto}
+.proof .pr .nw{flex:1;min-width:0;color:var(--bone);font-size:15px;font-weight:600}
+.win-day{font-family:var(--font-d);font-size:56px;line-height:1;font-weight:700;color:var(--bone);font-variant-numeric:tabular-nums}
+.win-sub{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);margin-top:5px}
+.winbox{margin-top:14px;background:var(--stone);border:1px solid var(--line);border-radius:5px;padding:14px;text-align:left}
+.winbox.gold{border-color:var(--bronze)}
+@media (prefers-reduced-motion:no-preference){
+  .s2{animation:fade .4s ease .3s both}
+  .s3{animation:fade .4s ease .6s both}
+  .s4{animation:fade .4s ease .9s both}
+  .strike{animation:strike .65s cubic-bezier(.2,.9,.3,1.2) both}
+}
+@keyframes strike{0%{transform:scale(.45) rotate(-10deg);opacity:0}55%{transform:scale(1.12) rotate(3deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
 </style>
 
 <div id="app">
@@ -240,6 +277,7 @@ textarea{min-height:84px;resize:vertical}
     <div><div class="k">Séria</div><div class="v" id="hStreak">–</div></div>
     <div><div class="k">Splnené</div><div class="v" id="hTotal">–</div></div>
   </div>
+  <div class="rankprog" id="rankProg"></div>
 
   <main id="vDnes"></main>
   <main id="vDennik" hidden></main>
@@ -436,13 +474,22 @@ var NOPE_Q = [
 
 /* ---------- 5. HODNOSTI ---------- */
 var RANKS=[
-{n:"Rekrút",min:0},
-{n:"Nosič štítu",min:7},
-{n:"Hoplita",min:21},
-{n:"Veterán",min:46},
-{n:"Spartiat",min:91},
-{n:"Strážca Termopýl",min:181}
+{n:"Rekrút",min:0,w:"Začiatok. Nikto sa nenarodil tvrdý."},
+{n:"Nosič štítu",min:7,w:"Týždeň za tebou. Už to nie je náhoda."},
+{n:"Hoplita",min:21,w:"Tri týždne. Teraz si už človek, ktorý to robí."},
+{n:"Veterán",min:46,w:"Mesiac a pol. Toto už nie je pokus. Toto si ty."},
+{n:"Spartiat",min:91,w:"Tri mesiace. Väčšina ľudí sa sem nedostane."},
+{n:"Strážca Termopýl",min:181,w:"Pol roka dobrovoľného diskomfortu. Vieš, čo v tebe je."}
 ];
+function rankIdx(n){var i=0;for(var j=0;j<RANKS.length;j++){if(n>=RANKS[j].min)i=j;}return i;}
+function insignia(n,w){
+  var k=rankIdx(n)+1,p="";
+  for(var j=0;j<k;j++){
+    var y=27-j*5;
+    p+='<path d="M3 '+(y+5)+' L11 '+y+' L19 '+(y+5)+'" fill="none" stroke="'+(j===0?"#C08E45":"#8A6630")+'" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>';
+  }
+  return '<svg viewBox="0 0 22 34" width="'+(w||26)+'" height="'+Math.round((w||26)*34/22)+'" aria-hidden="true">'+p+'</svg>';
+}
 function rankOf(n){var r=RANKS[0];for(var i=0;i<RANKS.length;i++){if(n>=RANKS[i].min)r=RANKS[i];}return r;}
 function nextRank(n){for(var i=0;i<RANKS.length;i++){if(RANKS[i].min>n)return RANKS[i];}return null;}
 
@@ -468,6 +515,8 @@ function freshState(){
     weeks:{},
     notified:{},
     remind:{morning:"06:30",evening:"21:00",notif:false},
+    oath:{why:"",who:""},
+    goal:{name:"",date:""},
     setupDone:false
   };
 }
@@ -486,6 +535,8 @@ function load(){
   S.catStreak=Object.assign({A:0,B:0,C:0},S.catStreak);
   S.days=S.days||{};S.weeks=S.weeks||{};S.notified=S.notified||{};
   S.remind=Object.assign({morning:"06:30",evening:"21:00",notif:false},S.remind);
+  S.oath=Object.assign({why:"",who:""},S.oath);
+  S.goal=Object.assign({name:"",date:""},S.goal);
 }
 function save(){
   if(!storeOk)return;
@@ -602,6 +653,84 @@ function chById(id){
 function quoteOfDay(){return QUOTES[hash(today()+"q")%QUOTES.length];}
 function barkOfDay(){return BARKS[hash(today()+"b")%BARKS.length];}
 
+/* veliteľský tón podľa toho, kde naozaj si */
+function commanderLine(){
+  var st=currentStreak(),tot=totalDone();
+  if(yesterdayFailed())return "Včera si vynechal. Dnes sa nevyberá.";
+  if(tot===0)return "Prvý rozkaz. Odtiaľto sa počíta všetko.";
+  if(st>=30)return "Deň "+(st+1)+". Toto už nie je disciplína, toto je povaha.";
+  if(st>=14)return "Séria "+st+" dní. Nerozbi dnes to, čo si dva týždne staval.";
+  if(st>=7)return "Séria "+st+" dní. Nekaz ju tým, že sa ti nechce.";
+  if(st>=3)return "Tretí deň láme ľudí. Ty ideš ďalej.";
+  if(st===0)return "Séria je na nule. Dnes sa začína nová.";
+  return BARKS[hash(today()+"b")%BARKS.length];
+}
+
+/* cieľ s odpočtom */
+function goalInfo(){
+  if(!S.goal||!S.goal.name||!S.goal.date)return null;
+  var t=today().split("-"),g=S.goal.date.split("-");
+  if(g.length!==3)return null;
+  var a=new Date(+t[0],+t[1]-1,+t[2]),b=new Date(+g[0],+g[1]-1,+g[2]);
+  return {name:S.goal.name,days:Math.round((b-a)/86400000)};
+}
+
+/* dôkaz, že sa meníš – iba z reálnych dát */
+function doneInWindow(fromK,toK){
+  var c=0;
+  for(var k in S.days){if(k>=fromK&&k<=toK&&S.days[k].status==="done")c++;}
+  return c;
+}
+function hardestDone(){
+  var best=null,bestK=null;
+  for(var k in S.days){
+    var r=S.days[k];
+    if(r.status!=="done")continue;
+    var ch=chById(r.id);
+    if(!ch||!ch.l)continue;
+    if(!best||ch.l>best.l||(ch.l===best.l&&k>bestK)){best=ch;bestK=k;}
+  }
+  return best?{ch:best,k:bestK}:null;
+}
+function proofOfChange(){
+  var out=[],ks=allDayKeys();
+  if(!ks.length)return out;
+  var first=ks[0],firstR=S.days[first],firstC=chById(firstR.id);
+  var tk=today(),tr=S.days[tk],tc=tr?chById(tr.id):null;
+  if(firstC&&tc&&first!==tk&&(tc.l||1)>=(firstC.l||1)){
+    out.push({l:"Prvý rozkaz a dnešný",th:firstC.t+" · úroveň "+(firstC.l||1),nw:tc.t+" · úroveň "+(tc.l||1)});
+  }
+  var prev=doneInWindow(shiftKey(tk,-59),shiftKey(tk,-30));
+  var now=doneInWindow(shiftKey(tk,-29),tk);
+  if(prev>0||now>0){
+    out.push({l:"Posledných 30 dní proti predošlým 30",th:prev+" z 30",nw:now+" z 30"});
+  }
+  var lv=S.levels.A+S.levels.B+S.levels.C;
+  if(lv>3){
+    out.push({l:"Úroveň výziev",th:"3 body na začiatku",nw:lv+" bodov teraz"});
+  }
+  var hd=hardestDone();
+  if(hd&&hd.ch.l>1){
+    out.push({l:"Najtvrdšie, čo si zvládol",th:"úroveň 1 na štarte",nw:hd.ch.t+" · úroveň "+hd.ch.l});
+  }
+  return out.slice(0,4);
+}
+
+/* nedeľné zúčtovanie týždňa */
+function weekStats(){
+  var tk=today(),d=0,f=0,hard="",by={A:0,B:0,C:0};
+  for(var i=0;i<7;i++){
+    var k=shiftKey(tk,-i),r=S.days[k];
+    if(!r)continue;
+    if(r.status==="done"){d++;if(by[r.cat]!==undefined)by[r.cat]++;}
+    if(r.status==="fail")f++;
+    if(!hard&&r.ref&&r.ref.q1)hard=r.ref.q1;
+  }
+  var weakest="A",wmin=99;
+  for(var c in by){if(S.levels[c]*10+by[c]<wmin){wmin=S.levels[c]*10+by[c];weakest=c;}}
+  return {done:d,fail:f,hard:hard,weakest:weakest};
+}
+
 /* ---------- 9. POČTY ---------- */
 function totalDone(){
   var n=0;for(var k in S.days){if(S.days[k].status==="done")n++;}
@@ -712,21 +841,70 @@ function shieldSvg(){
   '<path d="M34 62l14 15 28-32" fill="none" stroke="#C08E45" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>'+
   '</svg>';
 }
+function buzz(p){try{if(navigator.vibrate)navigator.vibrate(p);}catch(e){}}
+var EARNED=[
+"O jeden deň tvrdší ako včera.",
+"Nikto to nevidel. Ty to vieš. To stačí.",
+"Toto je ten rozdiel medzi rečami a robotou.",
+"Zajtra ťa to bude stáť menej. Preto to robíš.",
+"Jeden deň nič nezmení. Sto takýchto áno."
+];
 function showWin(newRank,leveledCat,weekly){
-  var lines=["Splnené. Zapísané.","O jeden deň tvrdší ako včera.","Dobre. Zajtra znova."];
+  buzz([35,70,35]);
+  var tot=totalDone(),st=currentStreak();
+  var r=rankOf(tot),nx=nextRank(tot);
   var head=weekly?"AGOGÉ VÝZVA SPLNENÁ":"SPLNENÉ";
-  var html='<div class="ovl"><div class="ovl-in">'+shieldSvg()+
-    '<h2 class="fade" style="font-size:28px;color:var(--bronze);margin-top:16px">'+head+'</h2>'+
-    '<p class="fade" style="color:var(--ash);margin-top:8px">'+lines[hash(today())%lines.length]+'</p>';
-  if(newRank)html+='<div class="fade" style="margin-top:20px;border:1px solid var(--bronze);border-radius:5px;padding:14px"><div class="eyebrow">Nová hodnosť</div><div class="disp" style="font-size:26px;color:var(--bone)">'+esc(newRank)+'</div></div>';
-  if(leveledCat)html+='<div class="fade" style="margin-top:14px;border:1px solid var(--line);border-radius:5px;padding:14px"><div class="eyebrow">Úroveň zvýšená</div><div class="disp" style="font-size:19px;color:var(--bone)">'+esc(CATNAME[leveledCat])+' → úroveň '+S.levels[leveledCat]+'</div><p class="hint">Päť splnených za sebou v tejto oblasti. Odteraz budú výzvy tvrdšie.</p></div>';
-  html+='<button class="btn prim" type="button" id="ovlClose" style="margin-top:22px">Zatvoriť</button></div></div>';
+  var html='<div class="ovl"><div class="ovl-in">'+
+    shieldSvg().replace("shield pop","shield strike")+
+    '<h2 class="s2" style="font-size:26px;color:var(--bronze);margin-top:14px;letter-spacing:.06em">'+head+'</h2>'+
+    '<div class="s2" style="margin-top:18px"><div class="win-day">'+tot+'</div>'+
+    '<div class="win-sub">'+(tot===1?"splnená výzva":(tot<5?"splnené výzvy":"splnených výziev"))+'</div></div>';
+
+  html+='<div class="winbox s3"><div class="eyebrow">Kde to pohlo</div>';
+  html+='<div style="display:flex;align-items:center;gap:10px;margin-top:4px">'+insignia(tot,24)+
+        '<div style="flex:1;min-width:0"><div class="disp" style="font-size:18px;color:var(--bone)">'+esc(r.n)+'</div>';
+  if(nx){
+    var span=nx.min-r.min,prog=Math.max(0,Math.min(100,Math.round((tot-r.min)/span*100)));
+    html+='<div class="bar" style="margin-top:6px"><i style="width:'+prog+'%"></i></div>'+
+          '<p class="hint" style="margin-top:5px">Ešte '+(nx.min-tot)+' do hodnosti '+esc(nx.n)+'.</p>';
+  }else{
+    html+='<p class="hint" style="margin-top:5px">Najvyššia hodnosť. Teraz to drž.</p>';
+  }
+  html+='</div></div>';
+  if(st>0)html+='<p class="hint" style="margin-top:10px">Séria: <b style="color:var(--bronze)">'+st+' '+(st===1?"deň":(st<5?"dni":"dní"))+'</b> za sebou. Najdlhšia '+longestStreak()+'.</p>';
+  html+='</div>';
+
+  if(newRank){
+    var nr=rankOf(tot);
+    html+='<div class="winbox gold s4"><div class="eyebrow">Nová hodnosť</div>'+
+    '<div style="display:flex;align-items:center;gap:10px;margin-top:6px">'+insignia(tot,30)+
+    '<div class="disp" style="font-size:24px;color:var(--bone)">'+esc(newRank)+'</div></div>'+
+    '<p style="color:#D8D4CC;margin-top:8px">'+esc(nr.w||"")+'</p></div>';
+  }
+  if(leveledCat){
+    html+='<div class="winbox gold s4"><div class="eyebrow">Úroveň zvýšená</div>'+
+    '<div class="disp" style="font-size:19px;color:var(--bone)">'+esc(CATNAME[leveledCat])+' → úroveň '+S.levels[leveledCat]+'</div>'+
+    '<p class="hint">Päť splnených za sebou v tejto oblasti. Odteraz to bude tvrdšie.</p></div>';
+  }else if(!weekly){
+    var rec=S.days[today()],cc=rec&&rec.cat;
+    if(cc)html+='<div class="winbox s4"><div class="eyebrow">'+esc(CATNAME[cc])+' · úroveň '+S.levels[cc]+'</div>'+
+    '<div class="bar" style="margin-top:7px"><i style="width:'+((S.catStreak[cc]||0)/5*100)+'%"></i></div>'+
+    '<p class="hint" style="margin-top:6px">'+(S.levels[cc]>=3?"Najvyššia úroveň v tejto oblasti.":(S.catStreak[cc]||0)+" z 5 do úrovne "+(S.levels[cc]+1)+".")+'</p></div>';
+  }
+
+  html+='<p class="s4" style="color:var(--ash);margin-top:16px;font-style:italic">'+esc(EARNED[hash(today()+"e")%EARNED.length])+'</p>'+
+    '<button class="btn prim s4" type="button" id="ovlClose" style="margin-top:16px">Zatvoriť</button></div></div>';
   ovl.innerHTML=html;
   document.getElementById("ovlClose").onclick=closeOvl;
 }
 function showFail(){
+  buzz(120);
   ovl.innerHTML='<div class="ovl"><div class="ovl-in">'+
-  '<h2 style="font-size:24px;color:var(--bone)">Dnes nie.</h2>'+
+  '<svg class="shield" viewBox="0 0 110 128" aria-hidden="true" style="opacity:.6">'+
+  '<path d="M55 4 8 20v42c0 29 23 50 47 62 24-12 47-33 47-62V20L55 4z" fill="#1D1F24" stroke="#7E1C1C" stroke-width="3"/>'+
+  '<path d="M48 10 60 48 40 62 64 84 52 120" fill="none" stroke="#A82A2A" stroke-width="3" stroke-linejoin="round"/>'+
+  '</svg>'+
+  '<h2 style="font-size:24px;color:var(--bone);margin-top:14px">Dnes nie.</h2>'+
   '<p style="color:var(--ash);margin-top:12px">Žiadne výčitky. Jeden vynechaný deň nič neznamená.</p>'+
   '<div style="margin-top:18px;border:1px solid var(--blood);border-radius:5px;padding:14px;text-align:left">'+
   '<div class="eyebrow" style="color:var(--blood-bright)">Jediné pravidlo</div>'+
@@ -743,7 +921,8 @@ function showNope(){
   '<h2 style="font-size:24px;color:var(--bone);margin-bottom:12px">Začni len na dve minúty.</h2>'+
   '<p style="color:#D8D4CC">'+esc(n)+'</p>'+
   '<p style="color:var(--ash);margin-top:10px">Po dvoch minútach máš právo skončiť. Väčšinou neskončíš.</p>'+
-  '<div style="margin:20px 0;border-left:3px solid var(--bronze-dim);padding-left:14px;text-align:left">'+
+  (S.oath.why?'<div class="oathbox"><div class="o-l">Toto si napísal ty</div><div class="o-t">„'+esc(S.oath.why)+'“</div></div>':"")+
+  '<div style="margin:18px 0;border-left:3px solid var(--bronze-dim);padding-left:14px;text-align:left">'+
   '<div class="quote" style="font-size:18px">„'+esc(q.q)+'“</div><div class="quote-src">'+esc(q.a)+'</div></div>'+
   '<div class="count" id="cd">10</div>'+
   '<p class="hint" id="cdTxt">Nadýchni sa. Odpočítavam.</p>'+
@@ -761,6 +940,7 @@ function showNope(){
       cd.textContent="TERAZ";cd.style.fontSize="52px";
       txt.textContent="Dve minúty. Choď.";
       go.disabled=false;go.textContent="Idem na dve minúty";
+      buzz([25,50,25,50,70]);
       go.onclick=function(){closeOvl();toast("Dve minúty. Potom sa rozhodni znova.");};
     }
   },1000);
@@ -808,6 +988,7 @@ function renderDnes(){
     return out;
   }
 
+  out+=goalCard();
   out+='<div id="remindSlot">'+remindCard(r)+'</div>';
 
   /* pripomienka po vynechaní */
@@ -840,7 +1021,7 @@ function renderDnes(){
 
   out+='<div class="card order">';
   out+='<div class="eyebrow">Rozkaz dňa · '+esc(CATNAME[c.cat||c.c])+' · úroveň '+c.l+'</div>';
-  if(!r.status)out+='<div class="bark" style="margin-bottom:6px">'+esc(barkOfDay())+'</div>';
+  if(!r.status)out+='<div class="bark" style="margin-bottom:6px">'+esc(commanderLine())+'</div>';
   out+='<div class="ch-name">'+esc(c.t)+'</div>';
   out+='<div class="meta"><span class="tag b">'+esc(c.dur)+'</span><span class="tag">'+esc(placeLabel(c.p))+'</span><span class="tag">Dnes: '+esc(TRAINING[r.training])+'</span></div>';
   out+='<p class="ch-desc">'+esc(c.d)+'</p>';
@@ -862,6 +1043,10 @@ function renderDnes(){
   /* 3. týždenná AGOGÉ výzva */
   out+=weeklyCard();
 
+  /* 3b. prísaha a nedeľné zúčtovanie */
+  out+=oathCard();
+  out+=reckoningCard();
+
   /* 4. myšlienka dňa */
   out+=quoteCard();
 
@@ -869,6 +1054,38 @@ function renderDnes(){
   out+=reflectionCard(r,h);
 
   return out;
+}
+function goalCard(){
+  var g=goalInfo();
+  if(!g)return"";
+  if(g.days<0)return '<div class="goalstrip"><div class="g-n">'+esc(g.name)+'</div><div class="g-d">hotovo</div><div class="g-s">Je po ňom. Nastav si ďalší cieľ v sekcii Prečo → Nastavenia.</div></div>';
+  if(g.days===0)return '<div class="goalstrip"><div class="g-n">'+esc(g.name)+'</div><div class="g-d">DNES</div><div class="g-s">Toto je ten deň, na ktorý si sa chystal.</div></div>';
+  return '<div class="goalstrip"><div class="g-n">'+esc(g.name)+'</div><div class="g-d">o '+g.days+' '+(g.days===1?"deň":(g.days<5?"dni":"dní"))+'</div>'+
+  '<div class="g-s">To je '+g.days+' šancí byť tvrdší, než si dnes.</div></div>';
+}
+function oathCard(){
+  if(S.oath.why)return"";
+  return '<div class="card order"><div class="eyebrow">Chýba ti dôvod</div>'+
+  '<div class="bark">Prečo to vlastne robíš?</div>'+
+  '<p class="hint" style="margin-top:8px">Napíš to raz, vlastnými slovami. Keď sa ti najbližšie nebude chcieť, hodím ti to späť pred oči. Nič nefunguje lepšie ako tvoja vlastná veta.</p>'+
+  '<button class="btn prim" type="button" data-act="oath">Napísať prísahu</button></div>';
+}
+function reckoningCard(){
+  var d=new Date();
+  if(d.getDay()!==0)return"";
+  if(nowMin()<toMin(S.remind.evening))return"";
+  var w=weekStats(),tot=totalDone();
+  var out='<div class="card" style="border-color:var(--bronze-dim)"><div class="eyebrow">Nedeľa · zúčtovanie týždňa</div>'+
+  '<div class="ch-name" style="font-size:24px">'+w.done+' zo 7 dní</div>';
+  if(w.done===7)out+='<p class="ch-desc">Celý týždeň bez škrtu. Takto sa to robí.</p>';
+  else if(w.done>=5)out+='<p class="ch-desc">Silný týždeň. Dva dni ti chýbali, ale základ drží.</p>';
+  else if(w.done>=3)out+='<p class="ch-desc">Polovica. Nie je to zlé, ale vieš, že na to máš viac.</p>';
+  else out+='<p class="ch-desc">Slabý týždeň. Žiadne výčitky – ale pozri sa na to triezvo a budúci týždeň začni hneď v pondelok.</p>';
+  if(w.hard)out+='<div class="why">Najťažšie ti bolo: '+esc(w.hard)+'</div>';
+  if(S.oath.who)out+='<div class="oathbox"><div class="o-l">Kam ideš</div><div class="o-t">„'+esc(S.oath.who)+'“</div></div>';
+  out+='<div class="safety" style="background:#15120E;border-color:var(--bronze-dim);color:#D8D4CC"><b style="color:var(--bronze)">Budúci týždeň:</b> najviac zaostáva oblasť '+esc(CATNAME[w.weakest])+'. Tam sa oprie.</div>';
+  out+='<p class="hint" style="margin-top:10px">Spolu máš '+tot+' splnených výziev a hodnosť '+esc(rankOf(tot).n)+'.</p>';
+  return out+'</div>';
 }
 function quoteCard(){
   var q=quoteOfDay();
@@ -958,8 +1175,10 @@ function renderStat(){
   var tot=totalDone(),cur=currentStreak(),best=longestStreak(),by=doneByCat();
   var r=rankOf(tot),nx=nextRank(tot);
   var out='<div class="card"><div class="eyebrow">Hodnosť</div>'+
-  '<div class="disp" style="font-size:30px;color:var(--bronze)">'+esc(r.n)+'</div>'+
-  '<p class="hint">'+tot+' splnených výziev spolu.</p>';
+  '<div style="display:flex;align-items:center;gap:12px">'+insignia(tot,34)+
+  '<div style="flex:1;min-width:0"><div class="disp" style="font-size:28px;color:var(--bronze)">'+esc(r.n)+'</div>'+
+  '<p class="hint" style="margin-top:2px">'+tot+' splnených výziev spolu.</p></div></div>'+
+  '<p style="color:#D8D4CC;margin-top:10px;font-style:italic">'+esc(r.w||"")+'</p>';
   if(nx){
     var need=nx.min-tot;
     var span=nx.min-r.min,prog=Math.max(0,Math.min(100,Math.round((tot-r.min)/span*100)));
@@ -1005,6 +1224,29 @@ function renderStat(){
   '<span><b style="background:var(--blood)"></b>Nesplnené</span>'+
   '<span><b style="background:#1A1C21"></b>Nič</span>'+
   '<span><b style="background:transparent;box-shadow:0 0 0 2px var(--bone)"></b>Dnes</span></div></div>';
+
+  /* dôkaz, že sa meníš */
+  var pf=proofOfChange();
+  if(pf.length){
+    out+='<div class="card"><div class="eyebrow">Dôkaz, že sa meníš</div>'+
+    '<p class="hint" style="margin:0 0 2px">Nie pocity. To, čo naozaj sedí v dátach.</p><div class="proof">';
+    for(var i=0;i<pf.length;i++){
+      out+='<div class="pr"><div class="lbl">'+esc(pf[i].l)+'</div><div class="tn">'+
+      '<div class="th">'+esc(pf[i].th)+'</div><div class="ar">→</div><div class="nw">'+esc(pf[i].nw)+'</div></div></div>';
+    }
+    out+='</div></div>';
+  }
+
+  /* rebrík hodností */
+  out+='<div class="card"><div class="eyebrow">Cesta</div><div class="ladder">';
+  var ri=rankIdx(tot);
+  for(var j=0;j<RANKS.length;j++){
+    var cls=j<ri?"rk past":(j===ri?"rk on":"rk");
+    out+='<div class="'+cls+'">'+(j<=ri?insignia(RANKS[j].min,20):'<span style="width:20px;display:inline-block"></span>')+
+    '<div class="nm">'+esc(RANKS[j].n)+'</div>'+
+    '<div class="dd">'+(j<=ri?"máš":(RANKS[j].min-tot)+" dní")+'</div></div>';
+  }
+  out+='</div></div>';
   return out;
 }
 
@@ -1067,6 +1309,22 @@ function renderInfo(){
   out+='<label>Úrovne</label><div class="hint">';
   CATORDER.forEach(function(cc){out+=esc(CATNAME[cc])+": úroveň "+S.levels[cc]+" ("+(S.catStreak[cc]||0)+"/5)<br>";});
   out+='</div>';
+
+  out+='<label>Tvoja prísaha</label>';
+  if(S.oath.why||S.oath.who){
+    if(S.oath.why)out+='<div class="oathbox"><div class="o-l">Prečo to robím</div><div class="o-t">„'+esc(S.oath.why)+'“</div></div>';
+    if(S.oath.who)out+='<div class="oathbox"><div class="o-l">Kým chcem byť o rok</div><div class="o-t">„'+esc(S.oath.who)+'“</div></div>';
+    out+='<button class="btn sm" type="button" data-act="oath">Prepísať prísahu</button>';
+  }else{
+    out+='<p class="hint" style="margin:0 0 8px">Zatiaľ si ju nenapísal. Je to jediná veta, ktorú ti appka pripomenie vtedy, keď sa ti najmenej chce.</p>'+
+    '<button class="btn sm prim" type="button" data-act="oath">Napísať prísahu</button>';
+  }
+
+  out+='<label>Hlavný cieľ</label>'+
+  '<input type="text" data-goal="name" value="'+esc(S.goal.name)+'" placeholder="Napr. Spartan Race Super" aria-label="Názov cieľa">'+
+  '<div style="height:8px"></div>'+
+  '<input type="date" data-goal="date" value="'+esc(S.goal.date)+'" aria-label="Dátum cieľa">'+
+  '<p class="hint">Keď ho vyplníš, na obrazovke Dnes uvidíš odpočet. Každý deň diskomfortu je potom jedna šanca navyše, nie len odškrtnutá položka.</p>';
 
   out+='<label>Pripomienky</label>'+
   '<div class="sch"><span>Ráno</span><input type="time" data-rem="morning" value="'+esc(S.remind.morning)+'" aria-label="Čas ranného rozkazu"></div>'+
@@ -1140,6 +1398,25 @@ function doReset(){
     save();closeOvl();go("Dnes");toast("Vymazané. Začínaš od Rekrúta.");
   };
 }
+function doOath(){
+  ovl.innerHTML='<div class="ovl"><div class="ovl-in" style="text-align:left">'+
+  '<div class="eyebrow">Prísaha</div>'+
+  '<h2 style="font-size:23px;color:var(--bone);margin-bottom:10px">Napíš si to raz. Vlastnými slovami.</h2>'+
+  '<p class="hint" style="margin-bottom:4px">Krátko a konkrétne. Žiadne frázy – napíš to tak, ako by si to povedal nahlas. Toto ti hodím pred oči vtedy, keď stlačíš „Nechce sa mi“.</p>'+
+  '<label for="oW">Prečo to robím?</label>'+
+  '<textarea id="oW" placeholder="Napr. Lebo nechcem byť chlap, ktorý sa vyhovára na únavu.">'+esc(S.oath.why)+'</textarea>'+
+  '<label for="oK">Kým chcem byť o rok?</label>'+
+  '<textarea id="oK" placeholder="Napr. Chlap, ktorý dokončí Spartan Super a doma je pri deťoch, nie pri mobile.">'+esc(S.oath.who)+'</textarea>'+
+  '<button class="btn prim" type="button" id="oGo">Toto je moja prísaha</button>'+
+  '<button class="btn ghost" type="button" id="ovlClose">Teraz nie</button></div></div>';
+  document.getElementById("ovlClose").onclick=closeOvl;
+  document.getElementById("oGo").onclick=function(){
+    S.oath.why=document.getElementById("oW").value.trim().slice(0,300);
+    S.oath.who=document.getElementById("oK").value.trim().slice(0,300);
+    save();closeOvl();render();
+    if(S.oath.why)toast("Zapísané. Teraz to plať.");
+  };
+}
 function doSetup(){
   ovl.innerHTML='<div class="ovl"><div class="ovl-in" style="text-align:left">'+
   '<div class="eyebrow">Krok 1 z 2 · Kde teraz si</div>'+
@@ -1167,7 +1444,7 @@ function doSetup(){
   document.getElementById("sGo").onclick=function(){
     var sels=ovl.querySelectorAll("select[data-day]");
     for(var i=0;i<sels.length;i++)S.schedule[sels[i].getAttribute("data-day")]=sels[i].value;
-    S.setupDone=true;save();closeOvl();render();
+    S.setupDone=true;save();render();doOath();
   };
 }
 
@@ -1186,6 +1463,20 @@ function render(){
   document.getElementById("hRank").textContent=rankOf(tot).n;
   document.getElementById("hStreak").textContent=currentStreak()+" dní";
   document.getElementById("hTotal").textContent=String(tot);
+  var rp=document.getElementById("rankProg");
+  if(rp){
+    var rr=rankOf(tot),nn=nextRank(tot);
+    var bar="",lbl;
+    if(nn){
+      var span=nn.min-rr.min;
+      bar='<div class="bar"><i style="width:'+Math.max(0,Math.min(100,Math.round((tot-rr.min)/span*100)))+'%"></i></div>';
+      lbl="Ešte "+(nn.min-tot)+" do hodnosti "+nn.n;
+    }else{
+      bar='<div class="bar"><i style="width:100%"></i></div>';
+      lbl="Najvyššia hodnosť. Drž ju.";
+    }
+    rp.innerHTML=insignia(tot,26)+'<div class="txt"><div class="lbl">'+esc(lbl)+'</div>'+bar+'</div>';
+  }
   var mb=document.getElementById("modeBtn");
   mb.textContent=S.mode==="nemecko"?"Nemecko":"Doma";
   mb.setAttribute("aria-label","Režim: "+mb.textContent+". Prepnúť.");
@@ -1243,11 +1534,17 @@ document.getElementById("app").addEventListener("click",function(e){
   else if(a==="reset")doReset();
   else if(a==="setup")doSetup();
   else if(a==="notif"){if(S.remind.notif){S.remind.notif=false;save();render();toast("Pripomienky v prehliadači vypnuté.");}else askNotif();}
+  else if(a==="oath")doOath();
   else if(a==="setupSkip"){S.setupDone=true;save();render();}
 });
 document.getElementById("app").addEventListener("change",function(e){
   var s=e.target.closest("select[data-day]");
   if(s){S.schedule[s.getAttribute("data-day")]=s.value;save();toast("Rozpis uložený.");return;}
+  var g=e.target.closest("input[data-goal]");
+  if(g){
+    S.goal[g.getAttribute("data-goal")]=g.value.trim().slice(0,80);
+    save();render();toast("Cieľ uložený.");return;
+  }
   var t=e.target.closest("input[data-rem]");
   if(t){
     var v=t.value;

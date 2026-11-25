@@ -3,7 +3,7 @@
  * POZOR: pri zmene ktoréhokoľvek súboru zvýš CACHE, inak telefón drží starú verziu.
  */
 
-const CACHE = 'agoge-v1.0.0';
+const CACHE = 'agoge-v1.1.0';
 
 const PRECACHE = [
   './',
